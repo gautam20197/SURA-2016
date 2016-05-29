@@ -22,7 +22,7 @@ def extraction(document):
 		tokens = tokenizer.tokenize(i)
 		filtered_words = [w for w in tokens if not w in stopwords.words('english')]
 		sentences.append(" ".join(filtered_words))
-	return sentences
+	return (sentences,doc)
 
 # This function takes a string as an input to return an array of weights of all the terms (only index terms)
 def weight(sentence):
@@ -40,15 +40,42 @@ def weight(sentence):
 # This function returns the number of sentences a given string appears in
 def occurence(word):
 	count = 0
-	for sentence in a:
+	for sentence in filtered:
 		if (word in sentence):
 			count+=1
 	return count
 
-a = extraction('d061.txt') #This variable stores the array of sentences 
-N = len(a) 
-print(N)
-print(a[0])
-print(weight(a[0]))
-print(occurence('gilbert'))
+# This function returns the similarity between two sentences s1 and s2
+def similarity(s1,s2):
+	w1 = weight(s1)
+	w2 = weight(s2)
+	combined = list(zip(w1,w2))
+	similarity = 0
+	for i in combined:
+		(a,b) = i
+		similarity = similarity + (a*b) # dot product of the two vectors w1 and w2
+	w1 = [w*w for w in w1] 
+	total1 = math.sqrt(sum(w1)) # square root of the sum of sqaures of all elements of w1
+	w2 = [w*w for w in w2]
+	total2 = math.sqrt(sum(w2)) # square root of the sum of sqaures of all elements of w2
+	return (similarity/(total1*total2))
+
+# This function is used to return the adjacency matrix of the directed acyclic graph of an array of sentences s
+def adjacency(s):
+	dim = len(s) 
+	matrix = [[0 for i in range(dim)] for j in range(dim)] #creates a matrix of dimension dim*dim with each element zero
+	max = 0 #this variable stores the maximum similarity
+	for i in range(dim):
+		currentSentence = s[i]
+		for j in range((i+1),dim):
+			matrix[i][j] = similarity(currentSentence,s[j])
+			if(max<matrix[i][j]):
+				max = matrix[i][j]
+	return (matrix,max)
+
+
+(filtered,original) = extraction('new.txt') #This variable stores the array of sentences 
+N = len(filtered) #This variable stores the number of sentences 
+(documentMatrix, M) = adjacency(filtered) #This variable stores the adjacency matrix of the document
+
 
