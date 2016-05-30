@@ -45,7 +45,7 @@ def occurence(word):
 			count+=1
 	return count
 
-# This function returns the similarity between two sentences s1 and s2
+# This function returns the similarity between two sentences s1 and s2 taken as two strings
 def similarity(s1,s2):
 	w1 = weight(s1)
 	w2 = weight(s2)
@@ -73,9 +73,18 @@ def adjacency(s):
 				max = matrix[i][j]
 	return (matrix,max)
 
+# This function takes the adjacency matrix of the document and returns the maximum readability (uses dynamic programming)
+def maximumReadability(matrix):
+	distance = [-1]*N
+	distance[0] = 0
+	for i in range(N):
+		for j in range(i+1,N):
+			if(distance[j]<distance[i]+matrix[i][j]):
+				distance[j] = distance[i]+matrix[i][j]
+	return distance[-1]
+
 
 (filtered,original) = extraction('new.txt') #This variable stores the array of sentences 
 N = len(filtered) #This variable stores the number of sentences 
-(documentMatrix, M) = adjacency(filtered) #This variable stores the adjacency matrix of the document
-
-
+(documentMatrix, M) = adjacency(filtered) #This variable stores the adjacency matrix of the document and maximum similarity
+R = maximumReadability(documentMatrix) #This variable stores the maximum readability
