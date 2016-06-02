@@ -1,4 +1,5 @@
 import numpy as np
+import random  
 from Summary import *
 
 #initialize a random population for genetic algorithm
@@ -34,10 +35,48 @@ def elitism(fitnesses):
 	return [ind1,ind2]
 
 
+#one-point crossover between two parent chromosomes
+def crossover(parent1,parent2,S,N):
+	pivot=random.randint(0,N-2)
+	child1=[parent1[x] for x in range(0,pivot+1)]+[parent2[x] for x in range(pivot+1,N)]
+	child2=[parent2[x] for x in range(0,pivot+1)]+[parent1[x] for x in range(pivot+1,N)]
+	reswap(child1,child2,S,N)
+	return [child1,child2]
+
+
+#reswapping of bits (of offsprings) to make the number of ones equal in both children
+def reswap(child1,child2,S,N):
+	ones=sum(child1)
+	if(ones>S):
+		ind1=random.sample([x for x in range(N) if child1[x] == 1],ones-S)
+		for i in ind1:
+			child1[i]=0
+		ind2=random.sample([x for x in range(N) if child2[x] == 0],ones-S)
+		for i in ind2:
+			child2[i]=1
+	elif(ones<S):
+		ind1=random.sample([x for x in range(N) if child1[x] == 0],S-ones)
+		for i in ind1:
+			child1[i]=1
+		ind2=random.sample([x for x in range(N) if child2[x] == 1],S-ones)
+		for i in ind2:
+			child2[i]=0
+
+
 def GA(size,S,N):
 	population=initPopulation(size,S,N)
 	fitnesses=[fitness(x) for x in population]
-	for i in range(25):
-		best=elitism(fitnesses)
+	best=elitism(fitnesses)
+
+
+	(fitnesses[best[0]],fitnesses[best[1]])=(0,0)
+	denom=sum(fitnesses)
+	fitnesses=[x/denom for x in fitnesses]
+	select=np.random.choice(range(size),2,replace=False,p=fitnesses)
+
+
+	offspring=crossover(population[select[0]],population[select[1]],S,N)
+
+
 
 GA(20,(int)(N/2),N)
