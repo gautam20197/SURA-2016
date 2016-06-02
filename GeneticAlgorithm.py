@@ -9,8 +9,8 @@ def initPopulation(size,S,N):
 	return [np.random.permutation(init) for x in range(size)]
 
 #fitness function for a given summary, input  in the form of a chromosome 
-def fitness(chromosome):
-	f= 0.4*cohesionFactor(chromosome)+0.6*readabilityFactor(chromosome)
+def fitness(a,b,chromosome):
+	f= a*cohesionFactor(chromosome)+b*readabilityFactor(chromosome)
 	return f
 
 #evaluates the two individuals having the best values of fitness among the given population
@@ -117,10 +117,10 @@ def smallest(fitnesses):
 			
 
 #The overall genetic algorithm for a fixed fitness function
-def GA(size,S,N):
+def GA(size,S,N,a,b):
 	#initialize a random population of required size
 	population=initPopulation(size,S,N)
-	fitnesses=[fitness(x) for x in population]
+	fitnesses=[fitness(a,b,x) for x in population]
 	#best two individuals selected
 	best=elitism(fitnesses)
 
@@ -143,7 +143,7 @@ def GA(size,S,N):
 		mutate=random.randint(0,1)
 		if(mutate==1):
 			mutation(offspring[1],N)
-		(f1,f2)=(fitness(offspring[0]),fitness(offspring[1]))
+		(f1,f2)=(fitness(a,b,offspring[0]),fitness(a,b,offspring[1]))
 
 		
 		#pruning the set by removing the two weakest individuals from the new set
@@ -184,7 +184,23 @@ def GA(size,S,N):
 			tempBest[1]=worst[1]
 		
 		(best[0],best[1])=(tempBest[0],tempBest[1])
-		print((fitnesses[best[0]],fitnesses[best[1]]))
+	
+	return (population[best[0]],fitnesses[best[0]])
 
 
-GA(20,(int)(N/2),N)
+#runs 50iterations of GA function for different values of fitness function weights
+def main(size,S,N):
+	fittest=-1
+	summary=[0]
+	for i in range(50):
+		a=random.random()
+		(temp1,temp2)=GA(size,S,N,a,(1-a))
+		if(temp2>fittest):
+			fittest=temp2
+			summary=temp1
+		print(fittest)
+	return summary
+
+
+
+test=main(20,(int)(N/2),N)
