@@ -14,6 +14,7 @@ def fitness(chromosome):
 	return f
 
 #evaluates the two individuals having the best values of fitness among the given population
+#max1 = maximum fitness,	max2 = 2nd best fitness,    ind1 = index of summary with best fitness,   ind2 = index of summary with 2nd best fitness
 def elitism(fitnesses):
 	max1=0
 	max2=0
@@ -63,6 +64,37 @@ def reswap(child1,child2,S,N):
 			child2[i]=0
 
 
+#function to mutate the chromosome of an individual
+def mutation(chromosome,N):
+	ind=random.randint(0,N-1)
+	if(ind==0):
+		if(chromosome[0]==1&&chromosome[1]==0):
+			(chromosome[0],chromosome[1])=(0,1)
+		else:
+			mutation(chromosome,N)
+	elif(ind==N-1):
+		if(chromosome[N-1]==1&&chromosome[N-2]==0):
+			(chromosome[N-1],chromosome[N-2])=(0,1)
+		else:
+			mutation(chromosome,N)
+	else:
+		if(chromosome[ind]==1):
+			if(chromosome[ind-1]==0&&chromosome[ind+1]==1):
+				(chromosome[ind],chromosome[ind-1])=(0,1)
+			elif(chromosome[ind-1]==1&&chromosome[ind+1]==0):
+				(chromosome[ind],chromosome[ind+1])=(0,1)
+			else:
+				ind2=random.randint(0,1)
+				if(ind2==0):
+					(chromosome[ind],chromosome[ind+1])=(0,1)
+				else:
+					(chromosome[ind],chromosome[ind-1])=(0,1)
+		else:
+			mutation(chromosome,N)
+
+
+			
+
 def GA(size,S,N):
 	population=initPopulation(size,S,N)
 	fitnesses=[fitness(x) for x in population]
@@ -76,6 +108,15 @@ def GA(size,S,N):
 
 
 	offspring=crossover(population[select[0]],population[select[1]],S,N)
+
+
+	mutate=random.randint(0,1)
+	if(mutate==1):
+		mutation(offspring[0],N)
+	mutate=random.randint(0,1)
+	if(mutate==1)
+		mutation(offspring[1],N)
+
 
 
 
