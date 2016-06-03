@@ -36,3 +36,17 @@ def readabilityFactor(s):
 	normalizedReadability = readability/R
 	return normalizedReadability
 
+# This function takes an array of binary digits representing a summary and 
+# converts into a string that represents the summary
+def convertToText(s):
+	positions = [i for i in range(N) if(s[i]==1)]
+	summary = []
+	S = len(positions)
+	for i in positions:
+		summary.append(original[i])
+	return (' '.join(summary))
+
+
+
+
+
