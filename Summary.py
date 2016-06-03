@@ -46,6 +46,19 @@ def convertToText(s):
 		summary.append(original[i])
 	return (' '.join(summary))
 
+# This function takes an array of binary digits representing a summary and also 
+# the original array of sentences of the golden summary and returns the precision
+def precision(s,gold_original):
+	print(gold_original)
+	positions = [i for i in range(N) if(s[i]==1)]
+	summary = []
+	S = len(positions)
+	for i in positions:
+		summary.append(original[i])
+	print(summary)
+	common_sentences = list(set(summary).intersection(gold_original))
+	return(len(common_sentences)/len(summary))
+
 
 
 
