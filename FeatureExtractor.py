@@ -64,28 +64,29 @@ def similarity(s1,s2):
 def adjacency(s):
 	dim = len(s) 
 	matrix = [[0 for i in range(dim)] for j in range(dim)] #creates a matrix of dimension dim*dim with each element zero
-	max = 0 #this variable stores the maximum similarity
+	max1 = 0 #this variable stores the maximum similarity
 	for i in range(dim):
 		currentSentence = s[i]
 		for j in range((i+1),dim):
 			matrix[i][j] = similarity(currentSentence,s[j])
-			if(max<matrix[i][j]):
-				max = matrix[i][j]
-	return (matrix,max)
+			if(max1<matrix[i][j]):
+				max1 = matrix[i][j]
+	return (matrix,max1)
 
 # This function takes the adjacency matrix of the document and returns the maximum readability (uses dynamic programming)
 def maximumReadability(matrix):
-	distance = [-1]*N
-	distance[0] = 0
-	for i in range(N):
-		for j in range(i+1,N):
-			if(distance[j]<distance[i]+matrix[i][j]):
-				distance[j] = distance[i]+matrix[i][j]
-	return distance[-1]
+	result = [(N*[0]) for _ in range(N)] #creates a matrix of dimension N*N with each element zero
+	for i in range(1,N):
+		result[i] = list(result[i-1])
+		for j in range(1,i+1):
+			if((result[i][j])<(result[i-1][j-1]+ matrix[i-1][i])):
+				result[i][j] = (result[i-1][j-1]+ matrix[i-1][i])
+	return result
 
 
 (filtered,original) = extraction('d061.txt') #This variable stores the array of sentences 
 (gold_filtered,gold_original) = extraction('new.txt') #This variable stores the array of sentences of golden summary
 N = len(filtered) #This variable stores the number of sentences 
 (documentMatrix, M) = adjacency(filtered) #This variable stores the adjacency matrix of the document and maximum similarity
-R = maximumReadability(documentMatrix) #This variable stores the maximum readability
+R = maximumReadability(documentMatrix) #This variable stores the maximum readability matrix
+
