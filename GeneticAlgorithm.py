@@ -11,6 +11,7 @@ def initPopulation(size,S,N):
 #fitness function for a given summary, input  in the form of a chromosome 
 def fitness(a,b,chromosome):
 	f= a*cohesionFactor(chromosome)+b*readabilityFactor(chromosome)
+	#f=precision(chromosome,gold_original)
 	return f
 
 #evaluates the two individuals having the best values of fitness among the given population
@@ -83,12 +84,14 @@ def mutation(chromosome,N):
 				(chromosome[ind],chromosome[ind-1])=(0,1)
 			elif(chromosome[ind-1]==1 and chromosome[ind+1]==0):
 				(chromosome[ind],chromosome[ind+1])=(0,1)
-			else:
+			elif(chromosome[ind-1]==0 and chromosome[ind+1]==0):
 				ind2=random.randint(0,1)
 				if(ind2==0):
 					(chromosome[ind],chromosome[ind+1])=(0,1)
 				else:
 					(chromosome[ind],chromosome[ind-1])=(0,1)
+			else:
+				mutation(chromosome,N)
 		else:
 			mutation(chromosome,N)
 
@@ -199,8 +202,34 @@ def main(size,S,N):
 			fittest=temp2
 			summary=temp1
 		print(fittest)
-	return summary
+	print("Precision of the fittest summary:")
+	print(precision(summary,gold_original))
+	print(cohesionFactor(summary),readabilityFactor(summary))
+	return convertToText(summary)
 
+def main2(size,S,N,a,b):
+	(temp1,temp2)=GA(size,S,N,a,b)
+	print("Precision")
+	print(precision(temp1,gold_original))
+	print("Fitness")
+	print(temp2)
+	return precision(temp1,gold_original)
 
-
-test=main(20,(int)(N/2),N)
+"""x2=0
+prec=0
+for i in range(21):
+	a=i/20
+	b=1-a
+	print("*************Iteration**********")
+	print(i)
+	temp=main2(20,19,N,a,b)
+	if(temp>prec):
+		x2=a
+		prec=temp
+	temp=main2(20,19,N,a,b)
+	if(temp>prec):
+		x2=a
+		prec=temp
+print(prec)
+print(x2)"""
+print(main(20,19,N))
