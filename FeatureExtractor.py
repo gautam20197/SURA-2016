@@ -22,18 +22,31 @@ def extraction(document):
 		tokens = tokenizer.tokenize(i)
 		filtered_words = [w for w in tokens if not w in stopwords.words('english')]
 		sentences.append(" ".join(filtered_words))
+	f.close()
 	return (sentences,doc)
 
-# This function takes a string as an input to return an array of weights of all the terms (only index terms)
+# This function takes an list of sentences of a document(without stop words)
+# and gives us an list of all the index terms
+def indexTerms(document):
+	document = ' '.join(document)
+	words = nltk.word_tokenize(document)
+	freqDist = nltk.FreqDist(words)
+	a = list(freqDist.keys())
+	return a
+
+
+# This function takes a string as an input to return an list of weights of all the terms (only index terms)
 def weight(sentence):
 	weights = []
 	words = nltk.word_tokenize(sentence)
 	freqDist = nltk.FreqDist(words)
 	(a,b) = freqDist.most_common(1)[0]
-	for i in words:
+	for i in IndexTerms:
 		tf = freqDist[i]/b
 		# N has been defined below as the number of total sentences
-		isf = math.log(N/occurence(i))
+		isf = 0
+		if(tf!=0):
+			isf = math.log(N/occurence(i))
 		weights.append(tf*isf)
 	return weights
 
@@ -60,7 +73,7 @@ def similarity(s1,s2):
 	total2 = math.sqrt(sum(w2)) # square root of the sum of sqaures of all elements of w2
 	return (similarity/(total1*total2))
 
-# This function is used to return the adjacency matrix of the directed acyclic graph of an array of sentences s
+# This function is used to return the adjacency matrix of the directed acyclic graph of an list of sentences s
 def adjacency(s):
 	dim = len(s) 
 	matrix = [[0 for i in range(dim)] for j in range(dim)] #creates a matrix of dimension dim*dim with each element zero
@@ -84,8 +97,9 @@ def maximumReadability(matrix):
 	return result
 
 
-(filtered,original) = extraction('d061.txt') #This variable stores the array of sentences 
-(gold_filtered,gold_original) = extraction('new.txt') #This variable stores the array of sentences of golden summary
+(filtered,original) = extraction('d061.txt') #This variable stores the list of sentences 
+IndexTerms = indexTerms(filtered) #This variable stores the list of all the index terms
+(gold_filtered,gold_original) = extraction('new.txt') #This variable stores the list of sentences of golden summary
 N = len(filtered) #This variable stores the number of sentences 
 (documentMatrix, M) = adjacency(filtered) #This variable stores the adjacency matrix of the document and maximum similarity
 R = maximumReadability(documentMatrix) #This variable stores the maximum readability matrix
