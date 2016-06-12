@@ -142,7 +142,7 @@ initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
 fprintf('\nChecking Backpropagation... \n');
 
 %  Check gradients by running checkNNGradients
-checkNNGradients;
+%checkNNGradients;
 
 fprintf('\nProgram paused. Press enter to continue.\n');
 pause;
@@ -214,11 +214,6 @@ pause;
 
 fprintf('\nVisualizing Neural Network... \n')
 
-displayData(Theta1(:, 2:end));
-fprintf('\nTheta1 matrix is as follows\n');
-fprintf(Theta1);
-fprintf('\nTheta2 matrix is as follows\n');
-fprintf(Theta2);
 
 fprintf('\nProgram paused. Press enter to continue.\n');
 pause;
@@ -231,6 +226,6 @@ pause;
 
 pred = predict(Theta1, Theta2, X);
 
-fprintf('\nTraining Set Accuracy: %f\n', mean(double(pred == y)) * 100);
+fprintf('\nTraining Set Accuracy: %f\n', mean(double(abs(pred-y)<0.05)) * 100);
 
 
