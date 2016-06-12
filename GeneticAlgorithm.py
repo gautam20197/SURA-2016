@@ -217,12 +217,15 @@ def main2(size,S,N,a,b):
 	return precision(temp1,gold_original)
 
 def training(indices):
+	dataFile=open("data.txt",'w')
+	dataFile.truncate()
 	chrom=[0]*N
 	others=[x for x in range(N)]
 	for i in indices:
 		chrom[i]=1
 		del others[i]
-	print(cohesionFactor(chrom),readabilityFactor(chrom),1)
+	dataFile.write(str(cohesionFactor(chrom))+","+str(readabilityFactor(chrom))+",1")
+	dataFile.write("\n")
 	for i in range(1,(len(indices))+1):
 		indexZero=random.sample(indices,i)
 		indexOne=random.sample(others,i)
@@ -230,11 +233,12 @@ def training(indices):
 			chrom[j]=0
 		for j in indexOne:
 			chrom[j]=1
-		print(cohesionFactor(chrom),readabilityFactor(chrom),((19-i)/19))
+		dataFile.write(str(cohesionFactor(chrom))+","+str(readabilityFactor(chrom))+","+str((19-i)/19))
+		dataFile.write("\n")
 		chrom=[0]*N
 		for j in indices:
 			chrom[j]=1
-
+	dataFile.close()
 
 
 """x2=0

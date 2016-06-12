@@ -34,7 +34,6 @@ def readabilityFactor(s):
 	for i in range(S-1):
 		readability += documentMatrix[positions[i]][positions[i+1]]
 	normalizedReadability = readability/(R[N-1][S-1])
-	print(R[N-1][S-1])
 	return normalizedReadability
 
 # This function takes an list of binary digits representing a summary and 
