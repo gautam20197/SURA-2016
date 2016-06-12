@@ -2,8 +2,10 @@ import nltk
 import string
 import re
 import math
+import operator
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
+
 
 # This function is used to extract the sentences from a document
 def extraction(document):
@@ -31,8 +33,9 @@ def indexTerms(document):
 	document = ' '.join(document)
 	words = nltk.word_tokenize(document)
 	freqDist = nltk.FreqDist(words)
-	a = list(freqDist.keys())
-	return a
+	sorted_freqDist = list(reversed(sorted(freqDist.items(), key=operator.itemgetter(1))))
+	IndexTerms = [a for (a,b) in sorted_freqDist]
+	return IndexTerms
 
 
 # This function takes a string as an input to return an list of weights of all the terms (only index terms)
