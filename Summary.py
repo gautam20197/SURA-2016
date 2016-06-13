@@ -65,6 +65,34 @@ def convertToChromosome(summary):
 		positions.append(original.index(i))
 	return positions
 
+# This function takes an list of binary digits representing a summary and  
+# returns the Topic Relation Factor of the summary
+def topicRelationFactor(s):
+	positions = [i for i in range(N) if (s[i]==1) ]
+	relation = 0
+	for i in positions:
+		relation+= queryList[i]
+	S = len(positions)
+	duplicate = list(queryList)
+	duplicate = list(reversed(duplicate.sort()))
+	duplicate = duplicate[:S]
+	maximum = sum(duplicate)
+	return (relation/maximum)
+
+# This function takes an list of binary digits representing a summary and  
+# returns the Topic Relation Factor of the summary
+def topicRelationFactor(s):
+	positions = [i for i in range(N) if (s[i]==1) ]
+	relation = 0
+	for i in positions:
+		relation+= queryList[i]
+	S = len(positions)
+	duplicate = list(queryList)
+	duplicate = list(reversed(duplicate.sort()))
+	duplicate = duplicate[:S]
+	maximum = sum(duplicate)
+	return (relation/maximum)
+
 # This function takes a list of positions in integer form and then computes readability
 # based on the order of these positions (not being used)
 def readabilityFactor2(positions):
@@ -74,6 +102,7 @@ def readabilityFactor2(positions):
 		readability += documentMatrix[a[i]][a[i+1]]
 	normalizedReadability = readability/(R[N-1][S-1])
 	return normalizedReadability
+
 
 
 
