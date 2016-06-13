@@ -108,7 +108,6 @@ def querySimilarity(filtered,IndexTerms,Query):
 	query = []
 	freq = sum(Query)
 	for i in range(5): #The range is 5 because we want the top five occuring words
-		print (IndexTerms[i])
 		isf = math.log(N/occurence(IndexTerms[i]))
 		query.append(Query[i]/freq)
 	w1 = [w*w for w in query] # squares of weights of query
