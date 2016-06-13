@@ -25,6 +25,7 @@ X=[ones(m,1) X];
 act1=X*(Theta1');
 act=sigmoid(act1);
 act=[ones(m,1) act];
+z3=act*(Theta2');
 h=sigmoid(act*(Theta2'));
 %Y=zeros(m,num_labels);
 
@@ -76,7 +77,7 @@ J = J + (lambda/(2*m))*sum(nn_params.^2);
 %backpropagation
 a1=X;
 a3=h;
-delta3=a3-y;
+delta3=(a3-y).*sigmoidGradient(z3);
 delta2=delta3*theta2.*sigmoidGradient(act1);
 Theta2_grad=(delta3'*act)*(1/m);
 Theta1_grad=(delta2'*a1)*(1/m);
