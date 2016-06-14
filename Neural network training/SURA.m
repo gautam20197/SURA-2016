@@ -184,7 +184,7 @@ fprintf('\nTraining Neural Network... \n')
 options = optimset('MaxIter', 400);
 
 %  You should also try different values of lambda
-lambda = 0.000001;
+lambda = 0.0003;
 
 % Create "short hand" for the cost function to be minimized
 costFunction = @(p) nnCostFunction(p, ...
@@ -227,6 +227,8 @@ pause;
 pred = predict(Theta1, Theta2, X);
 
 fprintf('\nTraining Set Accuracy: %f\n', mean(double(abs(pred-y)<0.05)) * 100);
+
+pred = predict(Theta1, Theta2, [X;0.10696976690144792,0.527110439544447;0.09882370879054053,0.4870250784502791]);
 
 x1_vals=linspace(0,1,100);
 x2_vals=linspace(0,1,100);

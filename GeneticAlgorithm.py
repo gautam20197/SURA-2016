@@ -1,6 +1,30 @@
 import numpy as np
-import random  
+import random 
+import math
 from Summary import *
+
+#Neural network weights
+#Theta1=np.matrix(([3.2941,-26.4858,-21.1008],[2.6068,4.0660,9.1602],[1.0088,18.2220,3.2607]),dtype=float)
+#Theta2=np.matrix(([-6.4855,-10.6460,-3.1292,11.6845]),dtype=float)
+Theta1=np.matrix(([-1.1120,3.0498,4.6808],[1.1143,-3.0673,-4.6843],[0.1695,-0.5092,-0.8294]),dtype=float)
+Theta2=np.matrix(([0.7758,5.9101,-5.8939,-0.9579]),dtype=float)
+
+def sigmoid(x):
+  return 1 / (1 + math.exp(-x))
+
+def sigmoidArray(arr):
+	(rows,columns)=np.shape(arr)
+	for i in range(rows):
+		arr[i][0]=sigmoid(arr[i][0])
+	return arr
+
+#function to implemen
+def forward(X):
+	hidden=sigmoidArray(Theta1*X)
+	biasedHidden=np.matrix(([1],[0],[0],[0]),dtype=float)
+	biasedHidden[1:4,:]=(np.matrix(hidden))
+	output=sigmoidArray(Theta2*biasedHidden)
+	return float(output[0][0])
 
 #initialize a random population for genetic algorithm
 #size = no. of individuals in population, S = no. of sentences in a summary, N = length of source document
@@ -10,8 +34,9 @@ def initPopulation(size,S,N):
 
 #fitness function for a given summary, input  in the form of a chromosome 
 def fitness(a,b,chromosome):
-	f= a*cohesionFactor(chromosome)+b*readabilityFactor(chromosome)
-	#f=precision(chromosome,gold_original)
+	#f= a*cohesionFactor(chromosome)+b*readabilityFactor(chromosome)
+	X=np.matrix(([1],[cohesionFactor(chromosome)],[readabilityFactor(chromosome)]),dtype=float)
+	f=forward(X)
 	return f
 
 #evaluates the two individuals having the best values of fitness among the given population
@@ -206,6 +231,7 @@ def main(size,S,N):
 	print(precision(summary,gold_original))
 	print(fittest)
 	print(cohesionFactor(summary),readabilityFactor(summary))
+	print([i for i in range(N) if(summary[i]==1)])
 	return convertToText(summary)
 
 def main2(size,S,N,a,b):
@@ -215,30 +241,8 @@ def main2(size,S,N,a,b):
 	print("Fitness")
 	print(temp2)
 	return precision(temp1,gold_original)
+	
 
-def training(indices):
-	dataFile=open("data.txt",'w')
-	dataFile.truncate()
-	chrom=[0]*N
-	others=[x for x in range(N)]
-	for i in indices:
-		chrom[i]=1
-		del others[i]
-	dataFile.write(str(cohesionFactor(chrom))+","+str(readabilityFactor(chrom))+",1")
-	dataFile.write("\n")
-	for i in range(1,(len(indices))+1):
-		indexZero=random.sample(indices,i)
-		indexOne=random.sample(others,i)
-		for j in indexZero:
-			chrom[j]=0
-		for j in indexOne:
-			chrom[j]=1
-		dataFile.write(str(cohesionFactor(chrom))+","+str(readabilityFactor(chrom))+","+str((19-i)/19))
-		dataFile.write("\n")
-		chrom=[0]*N
-		for j in indices:
-			chrom[j]=1
-	dataFile.close()
 
 
 """x2=0
@@ -258,5 +262,5 @@ for i in range(21):
 		prec=temp
 print(prec)
 print(x2)"""
-#print(main(20,10,N))
-training(convertToChromosome(gold_original))
+print(main(20,19,N))
+
