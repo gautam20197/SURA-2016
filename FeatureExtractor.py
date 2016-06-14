@@ -3,6 +3,7 @@ import string
 import re
 import math
 import operator
+import time
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
 
@@ -123,6 +124,7 @@ def querySimilarity(filtered,IndexTerms,Query):
 		queryList.append(similarity/(total1*total2))
 	return queryList	
 
+start = time.time()
 (filtered,original) = extraction('d061.txt') #This variable stores the list of sentences 
 (IndexTerms,Query) = indexTerms(filtered) #This variable stores the list of all the index terms
 #The variable Query stores the frequencies of top five words
@@ -131,5 +133,7 @@ N = len(filtered) #This variable stores the number of sentences
 (documentMatrix, M) = adjacency(filtered) #This variable stores the adjacency matrix of the document and maximum similarity
 R = maximumReadability(documentMatrix) #This variable stores the maximum readability matrix
 queryList = querySimilarity(filtered,IndexTerms,Query)
+end = time.time()
+print(end-start)
 
 
