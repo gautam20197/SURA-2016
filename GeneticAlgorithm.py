@@ -4,10 +4,14 @@ import math
 from Summary import *
 
 #Neural network weights
-#Theta1=np.matrix(([3.2941,-26.4858,-21.1008],[2.6068,4.0660,9.1602],[1.0088,18.2220,3.2607]),dtype=float)
-#Theta2=np.matrix(([-6.4855,-10.6460,-3.1292,11.6845]),dtype=float)
-Theta1=np.matrix(([-1.1120,3.0498,4.6808],[1.1143,-3.0673,-4.6843],[0.1695,-0.5092,-0.8294]),dtype=float)
-Theta2=np.matrix(([0.7758,5.9101,-5.8939,-0.9579]),dtype=float)
+f1 = open('Neural_network_training\Theta1.txt','r')
+Theta1=np.matrix([list(map(float,line.split(','))) for line in f1])
+f1.close()
+f2 = open('Neural_network_training\Theta2.txt','r')
+Theta2=np.matrix([list(map(float,line.split(','))) for line in f2])
+f2.close()
+print(Theta1)
+print(Theta2)
 
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
@@ -18,11 +22,11 @@ def sigmoidArray(arr):
 		arr[i][0]=sigmoid(arr[i][0])
 	return arr
 
-#function to implemen
+#function to implement forward propagation in neural network
 def forward(X):
 	hidden=sigmoidArray(Theta1*X)
-	biasedHidden=np.matrix(([1],[0],[0],[0]),dtype=float)
-	biasedHidden[1:4,:]=(np.matrix(hidden))
+	biasedHidden=np.matrix(([1]),dtype=float)
+	biasedHidden=np.vstack((biasedHidden,hidden))
 	output=sigmoidArray(Theta2*biasedHidden)
 	return float(output[0][0])
 

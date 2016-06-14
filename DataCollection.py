@@ -18,19 +18,23 @@ def training(indices):
 	dataFile.write(str(cohesionFactor(chrom))+","+str(readabilityFactor(chrom))+",1")
 	dataFile.write("\n")
 	for i in range(1,(len(indices))+1):
-		for t in range(2):
+		for t in range(5):
 			indexZero=random.sample(indices,i)
 			indexOne=random.sample(others,i)
 			for j in indexZero:
 				chrom[j]=0
 			for j in indexOne:
 				chrom[j]=1
-			dataFile.write(str(cohesionFactor(chrom))+","+str(readabilityFactor(chrom))+","+str((len(indices)-i)/len(indices))+","+str(precision(chrom,gold_original)))
+			dataFile.write(str(cohesionFactor(chrom))+","+str(readabilityFactor(chrom))+","+str(precision(chrom,gold_original)))
 			dataFile.write("\n")
 			chrom=[0]*N
 			for j in indices:
 				chrom[j]=1
 
+	for i in range(50):
+		chrom=np.random.permutation(chrom)
+		dataFile.write(str(cohesionFactor(chrom))+","+str(readabilityFactor(chrom))+","+str(precision(chrom,gold_original)))
+		dataFile.write("\n")
 
 dataFile=open("data.txt",'w')
 dataFile.truncate()

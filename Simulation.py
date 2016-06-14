@@ -1,10 +1,14 @@
-from FeatureExtractor import *
-#from Summary import *
+import numpy as np
+import re
+import math
+import operator
+import time
 
-(filtered,original) = extraction('new.txt') #This variable stores the array of sentences 
-N = len(filtered) #This variable stores the number of sentences 
-(documentMatrix, M) = adjacency(filtered) #This variable stores the adjacency matrix of the document
-print(filtered)
-print(original)
-print(documentMatrix)
-print(M)
+f1 = open('Neural_network_training\Theta1.txt','r')
+Theta1=np.matrix([list(map(float,line.split(','))) for line in f1])
+f1.close()
+f2 = open('Neural_network_training\Theta2.txt','r')
+Theta2=np.matrix([list(map(float,line.split(','))) for line in f2])
+f2.close()
+print(Theta1)
+print(Theta2)
