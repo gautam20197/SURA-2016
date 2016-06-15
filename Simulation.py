@@ -1,14 +1,25 @@
 import numpy as np
-import re
+import random 
 import math
-import operator
-import time
+from Summary import *
 
-f1 = open('Neural_network_training\Theta1.txt','r')
-Theta1=np.matrix([list(map(float,line.split(','))) for line in f1])
-f1.close()
-f2 = open('Neural_network_training\Theta2.txt','r')
-Theta2=np.matrix([list(map(float,line.split(','))) for line in f2])
-f2.close()
-print(Theta1)
-print(Theta2)
+def index2chrom(indices):
+	chrom=[0]*N
+	for i in indices:
+		chrom[i]=1
+	return chrom
+
+#print("d061\tN="+str(N)+"\tS="+str(len(gold_filtered))+"\tCF="+str(cohesionFactor(index2chrom(convertToChromosome(gold_original))))+"\tRF="+str(readabilityFactor(index2chrom(convertToChromosome(gold_original)))))
+
+for i in range(62,71):
+	(filtered,original) = extraction('Documents\d0'+str(i)+'.txt') 
+	(IndexTerms,Query) = indexTerms(filtered) 
+	(gold_filtered,gold_original) = extraction('Summaries\d0'+str(i)+'_400.txt')
+	print([original[i] for i in range(len(filtered)) if(len(filtered[i])==3)])
+
+
+	N = len(filtered) 
+	(documentMatrix, M) = adjacency(filtered) 
+	R = maximumReadability(documentMatrix) 
+	#queryList = querySimilarity(filtered,IndexTerms,Query)
+	print("d0"+str(i)+"\tN="+str(N)+"\tS="+str(len(gold_filtered))+"\tCF="+str(cohesionFactor(index2chrom(convertToChromosome(gold_original))))+"\tRF="+str(readabilityFactor(index2chrom(convertToChromosome(gold_original)))))
