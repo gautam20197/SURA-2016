@@ -2,7 +2,7 @@ from FeatureExtractor import *
 
 # This function takes an list of length N which has zeros or ones i.e represents a summary and 
 # returns the subgraph from the adjacency matrix of the document
-def subgraph(s):
+def subgraph(s,N,documentMatrix):
 	positions = [i for i in range(N) if(s[i]==1)]
 	S = len(positions)
 	matrix = [[0 for i in range(S)] for j in range(S)]
@@ -14,10 +14,10 @@ def subgraph(s):
 
 # This function takes an list of binary digits representing a summary and 
 # returns the Cohesion Factor of the summary
-def cohesionFactor(s):
+def cohesionFactor(s,N,M,documentMatrix):
 	positions = [i for i in range(N) if(s[i]==1)]
 	S = len(positions)
-	matrix = subgraph(s)
+	matrix = subgraph(s,N,documentMatrix)
 	rowSum = [sum(i) for i in matrix] 
 	#takes the sum of each individual rows and returns the sum in the form of an list
 	totalSum = sum(rowSum)
@@ -27,7 +27,7 @@ def cohesionFactor(s):
 
 # This function takes an list of binary digits representing a summary and 
 # returns the Readability Factor of the summary
-def readabilityFactor(s):
+def readabilityFactor(s,N,documentMatrix,R):
 	readability = 0
 	positions = [i for i in range(N) if(s[i]==1)]
 	S = len(positions)
@@ -38,7 +38,7 @@ def readabilityFactor(s):
 
 # This function takes an list of binary digits representing a summary and 
 # converts into a string that represents the summary
-def convertToText(s):
+def convertToText(s,original):
 	positions = [i for i in range(N) if(s[i]==1)]
 	summary = []
 	S = len(positions)
@@ -48,7 +48,7 @@ def convertToText(s):
 
 # This function takes an list of binary digits representing a summary and also 
 # the original list of sentences of the golden summary and returns the precision
-def precision(s,gold_original):
+def precision(s,N,gold_original):
 	positions = [i for i in range(N) if(s[i]==1)]
 	summary = []
 	S = len(positions)
@@ -59,7 +59,7 @@ def precision(s,gold_original):
 
 # This function takes a summary in the form of a list of strings(sentences) and 
 # returns an int list of the positions of the sentences in the document
-def convertToChromosome(summary):
+def convertToChromosome(summary,original):
 	positions = []
 	for i in summary:
 		positions.append(original.index(i))
@@ -67,7 +67,7 @@ def convertToChromosome(summary):
 
 # This function takes an list of binary digits representing a summary and  
 # returns the Topic Relation Factor of the summary
-def topicRelationFactor(s):
+def topicRelationFactor(s,N,queryList):
 	positions = [i for i in range(N) if (s[i]==1) ]
 	relation = 0
 	for i in positions:
@@ -81,7 +81,7 @@ def topicRelationFactor(s):
 
 # This function takes a list of positions in integer form and then computes readability
 # based on the order of these positions (not being used)
-def readabilityFactor2(positions):
+def readabilityFactor2(positions,N,documentMatrix):
 	readability = 0
 	S = len(a)
 	for i in range(S-1):
