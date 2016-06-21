@@ -39,7 +39,7 @@ def initPopulation(size,S,N):
 #fitness function for a given summary, input  in the form of a chromosome 
 def fitness(a,b,chromosome,N,M,documentMatrix,R):
 	f= a*cohesionFactor(chromosome,N,M,documentMatrix)+b*readabilityFactor(chromosome,N,documentMatrix,R)
-	#X=np.matrix(([1],[cohesionFactor(chromosome)],[readabilityFactor(chromosome)]),dtype=float)
+	#X=np.matrix(([1],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
 	#f=forward(X)
 	return f
 
