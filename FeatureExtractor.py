@@ -8,7 +8,7 @@ from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
 
 
-# This function is used to extract the sentences from a document
+# This function is used to extract the sentences from a non formatted document
 def extraction(document):
 	# punkt uses unsupervised learning to learn how to extract sentences
 	tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
@@ -28,6 +28,23 @@ def extraction(document):
 	f.close()
 	return (sentences,doc)
 
+# This function is used to extract the sentences from a formatted document
+def extractionFormatted(document):
+	f = open(document,'rU')
+	docUnform = f.read()
+	sentences = docUnform.split("\n")
+	filtered = []
+	for i in sentences:
+		i = i.lower()
+		# RegexpTokenizer divides a sring into substrings based on alphabetical sequences
+		tokenizer = RegexpTokenizer(r'\w+')
+		tokens = tokenizer.tokenize(i)
+		filtered_words = [w for w in tokens if not w in stopwords.words('english')]
+		filtered.append(" ".join(filtered_words))
+	f.close()
+	return(filtered,sentences)
+
+
 # This function takes an list of sentences of a document(without stop words)
 # and gives us an list of all the index terms
 def indexTerms(document):
@@ -42,6 +59,8 @@ def indexTerms(document):
 
 # This function takes a string as an input to return an list of weights of all the terms (only index terms)
 def weight(sentence,N,IndexTerms,filtered):
+	if(sentence == ''):
+		return [0]*len(IndexTerms)
 	weights = []
 	words = nltk.word_tokenize(sentence)
 	freqDist = nltk.FreqDist(words)
@@ -95,8 +114,11 @@ def adjacency(s,N,IndexTerms,filtered):
 					max1 = matrix[i][j]
 		return (matrix,max1)
 	except:
+		print(i)
 		print (currentSentence)
+		print("###############")
 		print (j)
+		print(s[j])
 
 # This function takes the adjacency matrix of the document and returns the maximum readability (uses dynamic programming)
 def maximumReadability(matrix,N):
@@ -134,8 +156,11 @@ def querySimilarity(filtered,IndexTerms,Query,N):
 			queryList.append(similarity/(total1*total2))
 	return queryList	
 
+#targetFile = open(str(i)+".txt","a")
+#for i in range(len(original)):
+#	targetFile.write(str(i)+". "+original[i]+"\n")
+#targetFile.close()
 
-#(filtered,original) = extraction('d061.txt') #This variable stores the list of sentences 
 #(IndexTerms,Query) = indexTerms(filtered) #This variable stores the list of all the index terms
 #The variable Query stores the frequencies of top five words
 #(gold_filtered,gold_original) = extraction('new.txt') #This variable stores the list of sentences of golden summary
