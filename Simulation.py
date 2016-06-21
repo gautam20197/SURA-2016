@@ -1,10 +1,10 @@
 import numpy as np
 import random 
 import math
-from Summary import *
+from GeneticAlgorithm import *
 import time
 
-def index2chrom(indices):
+def index2chrom(indices,N):
 	chrom=[0]*N
 	for i in indices:
 		chrom[i]=1
@@ -49,7 +49,7 @@ pos.append([1,2,3,4,5,7,8,10,11])
 pos.append([1,6,7,12,13,14,16,17,19,20])
 pos.append([1,3,5,8,9,10,11,12,14])
 
-target = open("observations.txt","a")
+"""target = open("observations.txt","a")
 target.write("With N longest path\n")
 for i in range(1,36):
 	(filtered,original) = extractionFormatted('documents/'+str(i)+'document.txt') 
@@ -65,4 +65,14 @@ for i in range(1,36):
 	target.write("document="+str(i)+"\tN="+str(N)+"\tS="+str(len(pos[i-1]))+"\tCF="+str(cohesionFactor(gold,N,M,documentMatrix))+"\tRF="+str(readabilityFactor(gold,N,documentMatrix,R))+"\n")
 	#end = time.time()
 	#print(end-start)
-target.close()
+target.close()"""
+
+i = 2
+(filtered,original) = extractionFormatted('documents/'+str(i)+'document.txt')
+(IndexTerms,Query) = indexTerms(filtered)
+N = len(filtered)
+(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered) #This variable stores the adjacency matrix of the document and maximum similarity
+R = maximumReadability(documentMatrix,N) #This variable stores the maximum readability matrix
+gold = pos[i-1]
+
+main(20,len(gold),N,M,documentMatrix,R,gold)

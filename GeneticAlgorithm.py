@@ -10,8 +10,8 @@ f1.close()
 f2 = open('Neural_network_training\Theta2.txt','r')
 Theta2=np.matrix([list(map(float,line.split(','))) for line in f2])
 f2.close()
-print(Theta1)
-print(Theta2)
+#print(Theta1)
+#print(Theta2)
 
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
@@ -37,10 +37,10 @@ def initPopulation(size,S,N):
 	return [np.random.permutation(init) for x in range(size)]
 
 #fitness function for a given summary, input  in the form of a chromosome 
-def fitness(a,b,chromosome):
-	#f= a*cohesionFactor(chromosome)+b*readabilityFactor(chromosome)
-	X=np.matrix(([1],[cohesionFactor(chromosome)],[readabilityFactor(chromosome)]),dtype=float)
-	f=forward(X)
+def fitness(a,b,chromosome,N,M,documentMatrix,R):
+	f= a*cohesionFactor(chromosome,N,M,documentMatrix)+b*readabilityFactor(chromosome,N,documentMatrix,R)
+	#X=np.matrix(([1],[cohesionFactor(chromosome)],[readabilityFactor(chromosome)]),dtype=float)
+	#f=forward(X)
 	return f
 
 #evaluates the two individuals having the best values of fitness among the given population
@@ -149,10 +149,10 @@ def smallest(fitnesses):
 			
 
 #The overall genetic algorithm for a fixed fitness function
-def GA(size,S,N,a,b):
+def GA(size,S,N,a,b,M,documentMatrix,R):
 	#initialize a random population of required size
 	population=initPopulation(size,S,N)
-	fitnesses=[fitness(a,b,x) for x in population]
+	fitnesses=[fitness(a,b,x,N,M,documentMatrix,R) for x in population]
 	#best two individuals selected
 	best=elitism(fitnesses)
 
@@ -175,7 +175,7 @@ def GA(size,S,N,a,b):
 		mutate=random.randint(0,1)
 		if(mutate==1):
 			mutation(offspring[1],N)
-		(f1,f2)=(fitness(a,b,offspring[0]),fitness(a,b,offspring[1]))
+		(f1,f2)=(fitness(a,b,offspring[0],N,M,documentMatrix,R),fitness(a,b,offspring[1],N,M,documentMatrix,R))
 
 		
 		#pruning the set by removing the two weakest individuals from the new set
@@ -221,50 +221,21 @@ def GA(size,S,N,a,b):
 
 
 #runs 50iterations of GA function for different values of fitness function weights
-def main(size,S,N):
+def main(size,S,N,M,documentMatrix,R,positions):
 	fittest=-1
 	summary=[0]
 	for i in range(50):
 		a=random.random()
-		(temp1,temp2)=GA(size,S,N,a,(1-a))
+		(temp1,temp2)=GA(size,S,N,a,(1-a),M,documentMatrix,R)
 		if(temp2>fittest):
 			fittest=temp2
 			summary=temp1
 		print(fittest)
 	print("Precision of the fittest summary:")
-	print(precision(summary,gold_original))
+	print(precision(summary,positions))
 	print(fittest)
-	print(cohesionFactor(summary),readabilityFactor(summary))
-	print([i for i in range(N) if(summary[i]==1)])
-	return convertToText(summary)
+	print(cohesionFactor(summary,N,M,documentMatrix),readabilityFactor(summary,N,documentMatrix,R))
+	print([(i+1) for i in range(N) if(summary[i]==1)])
+	print(positions)
 
-def main2(size,S,N,a,b):
-	(temp1,temp2)=GA(size,S,N,a,b)
-	print("Precision")
-	print(precision(temp1,gold_original))
-	print("Fitness")
-	print(temp2)
-	return precision(temp1,gold_original)
-	
-
-
-
-"""x2=0
-prec=0
-for i in range(21):
-	a=i/20
-	b=1-a
-	print("*************Iteration**********")
-	print(i)
-	temp=main2(20,19,N,a,b)
-	if(temp>prec):
-		x2=a
-		prec=temp
-	temp=main2(20,19,N,a,b)
-	if(temp>prec):
-		x2=a
-		prec=temp
-print(prec)
-print(x2)"""
-print(main(20,19,N))
 

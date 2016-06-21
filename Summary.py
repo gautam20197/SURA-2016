@@ -48,7 +48,7 @@ def convertToText(s,original):
 
 # This function takes an list of binary digits representing a summary and also 
 # the original list of sentences of the golden summary and returns the precision
-def precision(s,N,gold_original):
+def precision_old(s,N,gold_original,original):
 	positions = [i for i in range(N) if(s[i]==1)]
 	summary = []
 	S = len(positions)
@@ -56,6 +56,13 @@ def precision(s,N,gold_original):
 		summary.append(original[i])
 	common_sentences = list(set(summary).intersection(gold_original))
 	return(len(common_sentences)/len(summary))
+
+def precision(chrom,positions):
+	position = [(i+1) for i in range(len(chrom)) if(chrom[i]==1)]
+	common = list(set(positions).intersection(position))
+	return(len(common)/len(positions))
+
+
 
 # This function takes a summary in the form of a list of strings(sentences) and 
 # returns an int list of the positions of the sentences in the document
