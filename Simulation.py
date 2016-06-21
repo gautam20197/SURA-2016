@@ -67,7 +67,7 @@ for i in range(1,36):
 	#print(end-start)
 target.close()"""
 
-i = 2
+i = 3
 (filtered,original) = extractionFormatted('documents/'+str(i)+'document.txt')
 (IndexTerms,Query) = indexTerms(filtered)
 N = len(filtered)

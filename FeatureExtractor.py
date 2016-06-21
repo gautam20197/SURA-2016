@@ -126,8 +126,9 @@ def maximumReadability(matrix,N):
 	for i in range(1,N):
 		result[i] = list(result[i-1])
 		for j in range(1,i+1):
-			if((result[i][j])<(result[i-1][j-1]+ matrix[i-1][i])):
-				result[i][j] = (result[i-1][j-1]+ matrix[i-1][i])
+			for k in range(0,i):
+				if((result[i][j])<(result[k][j-1]+ matrix[k][i])):
+					result[i][j] = (result[k][j-1]+ matrix[k][i])
 	return result
 
 # This function takes the list of sentences of a document and the list of index terms
