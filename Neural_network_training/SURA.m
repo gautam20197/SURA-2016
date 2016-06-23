@@ -19,8 +19,8 @@
 clear ; close all; clc
 
 %% Setup the parameters you will use for this exercise
-input_layer_size  = 2;  % 20x20 Input Images of Digits
-hidden_layer_size = 5;   % 25 hidden units
+input_layer_size  = 3;  % 20x20 Input Images of Digits
+hidden_layer_size = 15;   % 25 hidden units
 num_labels = 1;          % 10 labels, from 1 to 10   
                           % (note that we have mapped "0" to label 10)
 
@@ -33,8 +33,8 @@ num_labels = 1;          % 10 labels, from 1 to 10
 fprintf('Loading and Visualizing Data ...\n')
 
 data = load('data.txt');
-X = data(:,1:2);
-y = data(:,3);
+X = data(:,1:3);
+y = data(:,4);
 m = size(X, 1);
 
 
@@ -47,7 +47,7 @@ pause;
 % In this part of the exercise, we load some pre-initialized 
 % neural network parameters.
 
-fprintf('\nLoading Saved Neural Network Parameters ...\n')
+%fprintf('\nLoading Saved Neural Network Parameters ...\n')
 
 % Load the weights into variables Theta1 and Theta2
 %load('ex4weights.mat');
@@ -67,27 +67,27 @@ fprintf('\nLoading Saved Neural Network Parameters ...\n')
 %  first so that it will be easier for you to debug. Later, in part 4, you
 %  will get to implement the regularized cost.
 %
-fprintf('\nFeedforward Using Neural Network ...\n')
+%fprintf('\nFeedforward Using Neural Network ...\n')
 
 % Weight regularization parameter (we set this to 0 here).
-lambda = 0;
+%lambda = 0;
 
 %J = nnCostFunction(nn_params, input_layer_size, hidden_layer_size,num_labels, X, y, lambda);
 
 %fprintf(['Cost at parameters (loaded from ex4weights): %f \n(this value should be about 0.287629)\n'], J);
 
-fprintf('\nProgram paused. Press enter to continue.\n');
-pause;
+%fprintf('\nProgram paused. Press enter to continue.\n');
+%pause;
 
 %% =============== Part 4: Implement Regularization ===============
 %  Once your cost function implementation is correct, you should now
 %  continue to implement the regularization with the cost.
 %
 
-fprintf('\nChecking Cost Function (w/ Regularization) ... \n')
+%fprintf('\nChecking Cost Function (w/ Regularization) ... \n')
 
 % Weight regularization parameter (we set this to 1 here).
-lambda = 1;
+%lambda = 1;
 
 %J = nnCostFunction(nn_params, input_layer_size, hidden_layer_size, ...
 %                   num_labels, X, y, lambda);
@@ -95,8 +95,8 @@ lambda = 1;
 %fprintf(['Cost at parameters (loaded from ex4weights): %f '...
 %         '\n(this value should be about 0.383770)\n'], J);
 
-fprintf('Program paused. Press enter to continue.\n');
-pause;
+%fprintf('Program paused. Press enter to continue.\n');
+%pause;
 
 
 %% ================ Part 5: Sigmoid Gradient  ================
@@ -226,29 +226,24 @@ pred = predict(Theta1, Theta2, X);
 
 fprintf('\nTraining Set Accuracy: %f\n', mean(double(abs(pred-y)<0.05)) * 100);
 
-pred = predict(Theta1, Theta2, X);
+%pred = predict(Theta1, Theta2, X);
 
-x1_vals=linspace(0,1,100);
-x2_vals=linspace(0,1,100);
-y_vals = zeros(length(x1_vals), length(x2_vals));
+%x1_vals=linspace(0,1,100);
+%x2_vals=linspace(0,1,100);
+%y_vals = zeros(length(x1_vals), length(x2_vals));
 
-for i = 1:length(x1_vals)
-    for j = 1:length(x2_vals)
-	  y_vals(i,j) = predict(Theta1,Theta2,[x1_vals(i) x2_vals(j)]);
-    end
-end
+%for i = 1:length(x1_vals)
+ %   for j = 1:length(x2_vals)
+%	  y_vals(i,j) = predict(Theta1,Theta2,[x1_vals(i) x2_vals(j)]);
+ %   end
+%end
 
-y_vals = y_vals';
+%y_vals = y_vals';
 % Surface plot
-figure;
-surf(x1_vals, x2_vals, y_vals)
-xlabel('Cohesion Factor'); ylabel('Readability factor');
+%figure;
+%surf(x1_vals, x2_vals, y_vals)
+%xlabel('Cohesion Factor'); ylabel('Readability factor');
 
-file1 = fopen('Theta1.txt','w');
-fclose(file1);
-
-file2 = fopen('Theta2.txt','w');
-fclose(file2);
 
 dlmwrite('Theta1.txt',Theta1);
 dlmwrite('Theta2.txt',Theta2);

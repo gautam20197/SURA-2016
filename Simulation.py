@@ -67,12 +67,12 @@ for i in range(1,36):
 	#print(end-start)
 target.close()"""
 
-i = 3
-(filtered,original) = extractionFormatted('documents/'+str(i)+'document.txt')
-(IndexTerms,Query) = indexTerms(filtered)
-N = len(filtered)
-(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered) #This variable stores the adjacency matrix of the document and maximum similarity
-R = maximumReadability(documentMatrix,N) #This variable stores the maximum readability matrix
-gold = pos[i-1]
-
-main(20,len(gold),N,M,documentMatrix,R,gold)
+for i  in range(21,36):
+	(filtered,original) = extractionFormatted('documents/'+str(i)+'document.txt')
+	(IndexTerms,Query) = indexTerms(filtered)
+	N = len(filtered)
+	(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered) #This variable stores the adjacency matrix of the document and maximum similarity
+	R = maximumReadability(documentMatrix,N) #This variable stores the maximum readability matrix
+	gold = pos[i-1]
+	print(i)
+	main(20,len(gold),N,M,documentMatrix,R,gold)

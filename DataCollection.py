@@ -40,13 +40,14 @@ pos.append([1,2,3,4,5,7,8,10,11])
 pos.append([1,6,7,12,13,14,16,17,19,20])
 pos.append([1,3,5,8,9,10,11,12,14])
 
-def training(indicesOne):	
+def training(indicesOne):
+	S=len(indicesOne)	
 	chrom=[0]*N
 	indices=[x-1 for x in indicesOne]
 	for i in indices:
 		chrom[i]=1
 	others=[x for x in range(N) if(chrom[x]==0)]
-	dataFile.write(str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+",1")
+	dataFile.write(str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+",1")
 	dataFile.write("\n")
 	for i in range(1,min(len(indices),len(others))+1):
 		indexZero=random.sample(indices,i)
@@ -55,7 +56,7 @@ def training(indicesOne):
 			chrom[j]=0
 		for j in indexOne:
 			chrom[j]=1
-		dataFile.write(str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
+		dataFile.write(str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
 		dataFile.write("\n")
 		chrom=[0]*N
 		for j in indices:
@@ -63,7 +64,7 @@ def training(indicesOne):
 
 	for i in range(min(len(indices),len(others))):
 		chrom=np.random.permutation(chrom)
-		dataFile.write(str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
+		dataFile.write(str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
 		dataFile.write("\n")
 
 dataFile=open("data.txt",'w')

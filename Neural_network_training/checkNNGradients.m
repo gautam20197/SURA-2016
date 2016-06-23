@@ -12,9 +12,9 @@ if ~exist('lambda', 'var') || isempty(lambda)
     lambda = 0;
 end
 
-input_layer_size = 3;
-hidden_layer_size = 5;
-num_labels = 3;
+input_layer_size = 2;
+hidden_layer_size = 10;
+num_labels = 1;
 m = 5;
 
 % We generate some 'random' test data
