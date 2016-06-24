@@ -57,12 +57,12 @@ def precision_old(s,N,gold_original,original):
 	common_sentences = list(set(summary).intersection(gold_original))
 	return(len(common_sentences)/len(summary))
 
+# This function takes a chromosome and the positions of sentences in the ideal 
+# summary and returns the precision
 def precision(chrom,positions):
 	position = [(i+1) for i in range(len(chrom)) if(chrom[i]==1)]
 	common = list(set(positions).intersection(position))
 	return(len(common)/len(positions))
-
-
 
 # This function takes a summary in the form of a list of strings(sentences) and 
 # returns an int list of the positions of the sentences in the document
@@ -95,6 +95,25 @@ def readabilityFactor2(positions,N,documentMatrix):
 		readability += documentMatrix[a[i]][a[i+1]]
 	normalizedReadability = readability/(R[N-1][S-1])
 	return normalizedReadability
+
+# This function takes the central theme of the document and the central theme of summary
+# and finds the similarity by taking dot product of unti vectors
+def themeSimilarity(centralDocument,centralSummary):
+	combined = list(zip(centralDocument,centralSummary))
+	similarity = 0
+	for i in combined:
+		(a,b) = i
+		similarity = similarity + (a*b) # dot product of the two vectors
+	w1 = [w*w for w in centralDocument] 
+	total1 = math.sqrt(sum(w1)) # square root of the sum of sqaures of all elements of centralDocument
+	w2 = [w*w for w in centralSummary]
+	total2 = math.sqrt(sum(w2)) # square root of the sum of sqaures of all elements of centralSumaary
+	if(total1==0 or total2==0):
+		return 0
+	return (similarity/(total1*total2))
+
+
+
 
 
 
