@@ -96,6 +96,13 @@ def readabilityFactor2(positions,N,documentMatrix):
 	normalizedReadability = readability/(R[N-1][S-1])
 	return normalizedReadability
 
+def summaryWeight(s,weightMatrix):
+	matrix =[]
+	positions = [i for i in range(len(s)) if (i==1)]
+	for i in positions:
+		matrix.append(i)
+	return matrix
+
 # This function takes the central theme of the document and the central theme of summary
 # and finds the similarity by taking dot product of unti vectors
 def themeSimilarity(centralDocument,centralSummary):
