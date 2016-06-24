@@ -100,7 +100,7 @@ def summaryWeight(s,weightMatrix):
 	matrix =[]
 	positions = [i for i in range(len(s)) if (i==1)]
 	for i in positions:
-		matrix.append(i)
+		matrix.append(weightMatrix[i])
 	return matrix
 
 # This function takes the central theme of the document and the central theme of summary

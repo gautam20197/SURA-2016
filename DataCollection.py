@@ -47,7 +47,8 @@ def training(indicesOne):
 	for i in indices:
 		chrom[i]=1
 	others=[x for x in range(N) if(chrom[x]==0)]
-	dataFile.write(str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+",1")
+	trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
+	dataFile.write(str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+",1")
 	dataFile.write("\n")
 	for i in range(1,min(len(indices),len(others))+1):
 		indexZero=random.sample(indices,i)
@@ -56,7 +57,8 @@ def training(indicesOne):
 			chrom[j]=0
 		for j in indexOne:
 			chrom[j]=1
-		dataFile.write(str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
+		trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
+		dataFile.write(str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
 		dataFile.write("\n")
 		chrom=[0]*N
 		for j in indices:
@@ -64,7 +66,8 @@ def training(indicesOne):
 
 	for i in range(min(len(indices),len(others))):
 		chrom=np.random.permutation(chrom)
-		dataFile.write(str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
+		trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
+		dataFile.write(str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
 		dataFile.write("\n")
 
 dataFile=open("data.txt",'w')
@@ -76,6 +79,8 @@ for it in range(1,21):
 	(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered) #This variable stores the adjacency matrix of the document and maximum similarity
 	R = maximumReadability(documentMatrix,N) #This variable stores the maximum readability matrix
 	gold = pos[it-1]
+	wm=weightMatrix(filtered,N,IndexTerms,filtered)
+	centralDocument=centralTheme(wm)
 	print(it)
 	training(gold)	
 dataFile.close()
