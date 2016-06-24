@@ -4,6 +4,7 @@ import re
 import math
 import operator
 import sys
+import numpy as np
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
 
@@ -156,6 +157,24 @@ def querySimilarity(filtered,IndexTerms,Query,N):
 		else:
 			queryList.append(similarity/(total1*total2))
 	return queryList	
+
+# This function takes an list of sentences and returns the matrix of the weights of all the
+# sentences
+def weightMatrix(s,N,IndexTerms,filtered):
+	w = []
+	for i in s:
+		w.append(weight(i,N,IndexTerms,filtered))
+	return w
+
+# This function takes a matrix of weights of sentences and returns the central theme vector
+def centralTheme(matrix):
+	l = len(matrix)
+	a = np.array(matrix)
+	sumOfColumns = a.sum(axis=0)
+	central = [i/l for i in list(sumOfColumns)]
+	return central
+
+
 
 #targetFile = open(str(i)+".txt","a")
 #for i in range(len(original)):
