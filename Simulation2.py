@@ -12,7 +12,7 @@ def index2chrom(indices,N):
 
 #print("d061\tN="+str(N)+"\tS="+str(len(gold_filtered))+"\tCF="+str(cohesionFactor(index2chrom(convertToChromosome(gold_original))))+"\tRF="+str(readabilityFactor(index2chrom(convertToChromosome(gold_original)))))
 
-i=67
+i=84
 start = time.time()
 (filtered,original) = extraction('Documents2/d0'+str(i)+'.txt') 
 (IndexTerms,Query) = indexTerms(filtered) 
@@ -21,9 +21,11 @@ start = time.time()
 
 
 N = len(filtered) 
-(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered) 
-R = maximumReadability(documentMatrix,N) 
 gold = index2chrom(convertToChromosome(gold_original,original),N)
+wM = weightMatrix(filtered,N,IndexTerms,filtered)
+(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered,wM) 
+R = maximumReadability(documentMatrix,N) 
+
 #queryList = querySimilarity(filtered,IndexTerms,Query)
 
 print("d0"+str(i)+"\tN="+str(N)+"\tS="+str(len(gold_original))+"\tCF="+str(cohesionFactor(gold,N,M,documentMatrix))+"\tRF="+str(readabilityFactor(gold,N,documentMatrix,R)))
