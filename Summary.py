@@ -96,9 +96,11 @@ def readabilityFactor2(positions,N,documentMatrix):
 	normalizedReadability = readability/(R[N-1][S-1])
 	return normalizedReadability
 
+# This function takes a chromosome of a summary and returns the weight of the 
+# sentences present in the summar from the weight matrix
 def summaryWeight(s,weightMatrix):
 	matrix =[]
-	positions = [i for i in range(len(s)) if (i==1)]
+	positions = [i for i in range(len(s)) if (s[i]==1)]
 	for i in positions:
 		matrix.append(weightMatrix[i])
 	return matrix

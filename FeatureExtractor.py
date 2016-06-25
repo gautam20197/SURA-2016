@@ -101,8 +101,24 @@ def similarity(s1,s2,N,IndexTerms,filtered):
 		return 0
 	return (similarity/(total1*total2))
 
+# This function is used to return the similarity of two given weight lists
+def similarityWeights(w1,w2):
+	combined = list(zip(w1,w2))
+	similarity = 0
+	for i in combined:
+		(a,b) = i
+		similarity = similarity + (a*b) # dot product of the two vectors w1 and w2
+	w1 = [w*w for w in w1] 
+	total1 = math.sqrt(sum(w1)) # square root of the sum of sqaures of all elements of w1
+	w2 = [w*w for w in w2]
+	total2 = math.sqrt(sum(w2)) # square root of the sum of sqaures of all elements of w2
+	if(total1==0 or total2==0):
+		return 0
+	return (similarity/(total1*total2))
+
+
 # This function is used to return the adjacency matrix of the directed acyclic graph of a list of sentences s
-def adjacency(s,N,IndexTerms,filtered):
+def adjacency(s,N,IndexTerms,filtered,weightMatrix):
 	try:
 		dim = len(s) 
 		matrix = [[0 for i in range(dim)] for j in range(dim)] #creates a matrix of dimension dim*dim with each element zero
@@ -110,7 +126,7 @@ def adjacency(s,N,IndexTerms,filtered):
 		for i in range(dim):
 			currentSentence = s[i]
 			for j in range((i+1),dim):
-				matrix[i][j] = similarity(currentSentence,s[j],N,IndexTerms,filtered)
+				matrix[i][j] = similarityWeights(weightMatrix[i],weightMatrix[j])
 				if(max1<matrix[i][j]):
 					max1 = matrix[i][j]
 		return (matrix,max1)
