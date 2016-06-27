@@ -5,6 +5,7 @@ import math
 import operator
 import sys
 import numpy as np
+import os
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
 

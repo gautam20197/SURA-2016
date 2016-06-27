@@ -4,10 +4,10 @@ import math
 from Summary import *
 
 #Neural network weights
-f1 = open('Neural_network_training\Theta1.txt','r')
+f1 = open('Neural_network_training/Theta1.txt','r')
 Theta1=np.matrix([list(map(float,line.split(','))) for line in f1])
 f1.close()
-f2 = open('Neural_network_training\Theta2.txt','r')
+f2 = open('Neural_network_training/Theta2.txt','r')
 Theta2=np.matrix([list(map(float,line.split(','))) for line in f2])
 f2.close()
 #print(Theta1)
@@ -38,9 +38,9 @@ def initPopulation(size,S,N):
 
 #fitness function for a given summary, input  in the form of a chromosome 
 def fitness(a,b,chromosome,N,M,documentMatrix,R):
-	#f= a*cohesionFactor(chromosome,N,M,documentMatrix)+b*readabilityFactor(chromosome,N,documentMatrix,R)
-	X=np.matrix(([1],[sum(chromosome)/N],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
-	f=forward(X)
+	f= a*cohesionFactor(chromosome,N,M,documentMatrix)+b*readabilityFactor(chromosome,N,documentMatrix,R)
+	#X=np.matrix(([1],[sum(chromosome)/N],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
+	#f=forward(X)
 	return f
 
 #evaluates the two individuals having the best values of fitness among the given population
@@ -231,17 +231,18 @@ def main(size,S,N,M,documentMatrix,R,positions):
 		#sump=sump+precision(temp1,positions)
 		#print(fittest)
 		if(temp2>fittest):
-			sump=precision(temp1,positions)
+			#sump=precision(temp1,positions)
 			summary=temp1
 			fittest=temp2
 
 	#sump=sump/50
 
 	
-	print(sump,temp2)
+	#print(sump,temp2)
 	"""print(fittest)
 	print(cohesionFactor(summary,N,M,documentMatrix),readabilityFactor(summary,N,documentMatrix,R))
 	print([(i+1) for i in range(N) if(summary[i]==1)])
 	print(positions)"""
+	return summary
 
 

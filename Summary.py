@@ -114,12 +114,30 @@ def themeSimilarity(centralDocument,centralSummary):
 		(a,b) = i
 		similarity = similarity + (a*b) # dot product of the two vectors
 	w1 = [w*w for w in centralDocument] 
-	total1 = math.sqrt(sum(w1)) # square root of the sum of sqaures of all elements of centralDocument
+	#total1 = math.sqrt(sum(w1)) # square root of the sum of sqaures of all elements of centralDocument
 	w2 = [w*w for w in centralSummary]
-	total2 = math.sqrt(sum(w2)) # square root of the sum of sqaures of all elements of centralSumaary
-	if(total1==0 or total2==0):
-		return 0
-	return (similarity/(total1*total2))
+	#total2 = math.sqrt(sum(w2)) # square root of the sum of sqaures of all elements of centralSumaary
+	#if(total1==0 or total2==0):
+	#		return 0
+	return similarity
+
+# This function takes a chromosome and the original document and writes the summary generated 
+# into a file in systems which is then used by rouge to find the precision
+def writeToFile(s,original,id):
+	positions = [i for i in range(len(s)) if(s[i]==1)]
+	dataFile = open("systems/"+"d"+id+".txt","w")
+	dataFile.truncate()
+	dataFile.write("<SUM>")
+	dataFile.write("\n")
+	for i in positions:
+		dataFile.write("<s>")
+		dataFile.write(original[i])
+		dataFile.write("</s>")
+		dataFile.write("\n")
+	dataFile.write("</SUM>")
+	dataFile.close()
+
+
 
 
 
