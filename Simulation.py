@@ -49,9 +49,11 @@ pos.append([1,2,3,4,5,7,8,10,11])
 pos.append([1,6,7,12,13,14,16,17,19,20])
 pos.append([1,3,5,8,9,10,11,12,14])
 
+maxFitness=[0.46,0.5,0.67,0.57,0.54,0.59,0.47,0.375,0.22,0.4,0.57,0.67,0.54,0.4,0.33,0.625,0.56,0.69,0.5,0.71,0.44,0.56,0.625,0.44,0.54,0.5,0.14,0.625,0.59,0.63,0.375,0.6,0.67,0.6,0.44]
+
 #target = open("observations.txt","a")
 #target.write("With N longest path\n")
-for i in range(1,36):
+"""for i in range(1,36):
 	(filtered,original) = extractionFormatted('Documents/'+str(i)+'document.txt') 
 	(IndexTerms,Query) = indexTerms(filtered) 
 	N = len(filtered) 
@@ -60,7 +62,7 @@ for i in range(1,36):
 		gold[j-1]=1
 	
 	wM = weightMatrix(filtered,N,IndexTerms,filtered)
-	(documentMatrix, M) = adjacency(filtered,N,IndexTerms,wM) #This variable stores the adjacency matrix of the document and maximum similarity
+	(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered,wM) #This variable stores the adjacency matrix of the document and maximum similarity
 	R = maximumReadability(documentMatrix,N) #This variable stores the maximum readability matrix
 	centralDocument = centralTheme(wM)
 	#trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(gold,wM)))
@@ -70,21 +72,27 @@ for i in range(1,36):
 		summary.append(filtered[k])
 	wD = weightMatrix(summary,N,IndexTerms,filtered)
 	trf = themeSimilarity(centralDocument,centralTheme(wD))
-	print(str(i) + " -" + " Theme Relation is : "+str(trf))
+	print(str(i) + " -" + " Aggregate Similarity is : "+str(aggregateSimilarity(gold,documentMatrix)))
 
 	#queryList = querySimilarity(filtered,IndexTerms,Query,N)
 	#target.write("document="+str(i)+"\tN="+str(N)+"\tS="+str(len(pos[i-1]))+"\tCF="+str(cohesionFactor(gold,N,M,documentMatrix))+"\tRF="+str(readabilityFactor(gold,N,documentMatrix,R))+"\n")
 	#end = time.time()
 	#print(end-start)
-#target.close()
-
-"""for i  in range(21,36):
-	(filtered,original) = extractionFormatted('documents/'+str(i)+'document.txt')
+#target.close()"""
+sumprec=0
+for i  in range(21,36):
+	(filtered,original) = extractionFormatted('Documents/'+str(i)+'document.txt')
 	(IndexTerms,Query) = indexTerms(filtered)
 	N = len(filtered)
-	weightMatrix = weightMatrix(filtered,N,IndexTerms)
-	(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered) #This variable stores the adjacency matrix of the document and maximum similarity
+	wm= weightMatrix(filtered,N,IndexTerms,filtered)
+	(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered,wm) #This variable stores the adjacency matrix of the document and maximum similarity
 	R = maximumReadability(documentMatrix,N) #This variable stores the maximum readability matrix
 	gold = pos[i-1]
-	print(i)
-	main(20,len(gold),N,M,documentMatrix,R,gold)"""
+	sortedAggregate = np.array(documentMatrix)
+	sortedAggregate = [sum(sortedAggregate[:,i]) for i in range(N)]
+	sortedAggregate.sort(reverse = True)
+	prec=main(20,len(gold),N,M,documentMatrix,R,gold,centralTheme(wm),wm)
+	sumprec=sumprec+prec
+	print(i,prec,maxFitness[i-1])
+
+print(sumprec,sum(maxFitness))

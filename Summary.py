@@ -154,7 +154,7 @@ def sentencePosition(s):
 
 # This function takes a chromosome and the document matrix ie the adjacency matrix of a document
 # and gives the aggregate similarity ie the sum of columns of the sentences present in the summary
-def aggregateSimilarity(s,documentMatrix):
+def aggregateSimilarity(s,documentMatrix,sortedAggregate):
 	positions = [i for i in range(len(s)) if(s[i]==1)]
 	N = len(s)
 	S = len(positions)
@@ -162,7 +162,9 @@ def aggregateSimilarity(s,documentMatrix):
 	total = 0
 	for i in positions:
 		total+=sum(a[:,i])
-	return (total/(N*S))
+	normalizationFactor = sum(sortedAggregate[:S])
+	return (total/normalizationFactor)
+	
 
 
 
