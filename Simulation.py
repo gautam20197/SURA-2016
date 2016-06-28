@@ -1,7 +1,7 @@
 import numpy as np
 import random 
 import math
-from Summary import *
+from GeneticAlgorithm import *
 import time
 
 def index2chrom(indices,N):
@@ -91,8 +91,8 @@ for i  in range(21,36):
 	sortedAggregate = np.array(documentMatrix)
 	sortedAggregate = [sum(sortedAggregate[:,i]) for i in range(N)]
 	sortedAggregate.sort(reverse = True)
-	prec=main(20,len(gold),N,M,documentMatrix,R,gold,centralTheme(wm),wm)
+	prec=main(20,len(gold),N,M,documentMatrix,R,gold,centralTheme(wm),wm,sortedAggregate)
 	sumprec=sumprec+prec
 	print(i,prec,maxFitness[i-1])
 
-print(sumprec,sum(maxFitness))
+print(sumprec,sum(maxFitness[20::]))

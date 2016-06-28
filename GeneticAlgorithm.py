@@ -37,10 +37,10 @@ def initPopulation(size,S,N):
 	return [np.random.permutation(init) for x in range(size)]
 
 #fitness function for a given summary, input  in the form of a chromosome 
-def fitness(a,b,chromosome,N,M,documentMatrix,R):
-	f= a*cohesionFactor(chromosome,N,M,documentMatrix)+b*readabilityFactor(chromosome,N,documentMatrix,R)
-	#X=np.matrix(([1],[sum(chromosome)/N],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
-	#f=forward(X)
+def fitness(a,b,chromosome,N,M,documentMatrix,R,centralDocument,wm,sortedAggregate):
+	#f= a*cohesionFactor(chromosome,N,M,documentMatrix)+b*readabilityFactor(chromosome,N,documentMatrix,R)
+	X=np.matrix(([1],[sentencePosition(chromosome)],[aggregateSimilarity(chromosome,documentMatrix,sortedAggregate)],[themeSimilarity(centralDocument,centralTheme(summaryWeight(chromosome,wm)))],[sum(chromosome)/N],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
+	f=forward(X)
 	return f
 
 #evaluates the two individuals having the best values of fitness among the given population
@@ -149,10 +149,10 @@ def smallest(fitnesses):
 			
 
 #The overall genetic algorithm for a fixed fitness function
-def GA(size,S,N,a,b,M,documentMatrix,R):
+def GA(size,S,N,a,b,M,documentMatrix,R,centralDocument,wm,sortedAggregate):
 	#initialize a random population of required size
 	population=initPopulation(size,S,N)
-	fitnesses=[fitness(a,b,x,N,M,documentMatrix,R) for x in population]
+	fitnesses=[fitness(a,b,x,N,M,documentMatrix,R,centralDocument,wm,sortedAggregate) for x in population]
 	#best two individuals selected
 	best=elitism(fitnesses)
 
@@ -175,7 +175,7 @@ def GA(size,S,N,a,b,M,documentMatrix,R):
 		mutate=random.randint(0,1)
 		if(mutate==1):
 			mutation(offspring[1],N)
-		(f1,f2)=(fitness(a,b,offspring[0],N,M,documentMatrix,R),fitness(a,b,offspring[1],N,M,documentMatrix,R))
+		(f1,f2)=(fitness(a,b,offspring[0],N,M,documentMatrix,R,centralDocument,wm,sortedAggregate),fitness(a,b,offspring[1],N,M,documentMatrix,R,centralDocument,wm,sortedAggregate))
 
 		
 		#pruning the set by removing the two weakest individuals from the new set
@@ -221,21 +221,21 @@ def GA(size,S,N,a,b,M,documentMatrix,R):
 
 
 #runs 50iterations of GA function for different values of fitness function weights
-def main(size,S,N,M,documentMatrix,R,positions):
+def main(size,S,N,M,documentMatrix,R,positions,centralDocument,wm,sortedAggregate):
 	sump=0
 	fittest=-1
 	summary=[0]
 	for i in range(50):
 		a=random.random()
-		(temp1,temp2)=GA(size,S,N,a,(1-a),M,documentMatrix,R)
-		#sump=sump+precision(temp1,positions)
+		(temp1,temp2)=GA(size,S,N,a,(1-a),M,documentMatrix,R,centralDocument,wm,sortedAggregate)
+		sump=sump+precision(temp1,positions)
 		#print(fittest)
-		if(temp2>fittest):
+		#if(temp2>fittest):
 			#sump=precision(temp1,positions)
-			summary=temp1
-			fittest=temp2
+		#	summary=temp1
+		#	fittest=temp2
 
-	#sump=sump/50
+	sump=sump/50
 
 	
 	#print(sump,temp2)
@@ -243,6 +243,6 @@ def main(size,S,N,M,documentMatrix,R,positions):
 	print(cohesionFactor(summary,N,M,documentMatrix),readabilityFactor(summary,N,documentMatrix,R))
 	print([(i+1) for i in range(N) if(summary[i]==1)])
 	print(positions)"""
-	return summary
+	return sump
 
 

@@ -19,8 +19,8 @@
 clear ; close all; clc
 
 %% Setup the parameters you will use for this exercise
-input_layer_size  = 3;  % 20x20 Input Images of Digits
-hidden_layer_size = 15;   % 25 hidden units
+input_layer_size  = 6;  % 20x20 Input Images of Digits
+hidden_layer_size = 13;   % 25 hidden units
 num_labels = 1;          % 10 labels, from 1 to 10   
                           % (note that we have mapped "0" to label 10)
 
@@ -33,8 +33,8 @@ num_labels = 1;          % 10 labels, from 1 to 10
 fprintf('Loading and Visualizing Data ...\n')
 
 data = load('data.txt');
-X = data(:,1:3);
-y = data(:,4);
+X = data(:,1:6);
+y = data(:,7);
 m = size(X, 1);
 
 
