@@ -137,6 +137,38 @@ def writeToFile(s,original,id):
 	dataFile.write("</SUM>")
 	dataFile.close()
 
+# This function takes a chromosome and then returns the sentence position summation for the 
+# sentences present in the summary and normalized by taking the sum of first S sentences position
+# importance
+def sentencePosition(s):
+	positions = [i for i in range(len(s)) if(s[i]==1)]
+	total = 0
+	N = len(s)
+	for i in positions:
+		total+= (2*(N-i))/(N*(N+1))
+	S = len(positions)
+	maximum = 0
+	for i in range(S):
+		maximum+= (2*(N-i))/(N*(N+1))
+	return (total/maximum)
+
+# This function takes a chromosome and the document matrix ie the adjacency matrix of a document
+# and gives the aggregate similarity ie the sum of columns of the sentences present in the summary
+def aggregateSimilarity(s,documentMatrix):
+	positions = [i for i in range(len(s)) if(s[i]==1)]
+	N = len(s)
+	S = len(positions)
+	a = np.array(documentMatrix)
+	total = 0
+	for i in positions:
+		total+=sum(a[:,i])
+	return (total/(N*S))
+
+
+
+
+
+
 
 
 
