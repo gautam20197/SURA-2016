@@ -50,7 +50,8 @@ pos.append([1,6,7,12,13,14,16,17,19,20])
 pos.append([1,3,5,8,9,10,11,12,14])
 
 maxFitness=[0.46,0.5,0.67,0.57,0.54,0.59,0.47,0.375,0.22,0.4,0.57,0.67,0.54,0.4,0.33,0.625,0.56,0.69,0.5,0.71,0.44,0.56,0.625,0.44,0.54,0.5,0.14,0.625,0.59,0.63,0.375,0.6,0.67,0.6,0.44]
-
+l = [line.split('\n')[0].split('\t') for line in open("AFINN-111.txt")]
+afinn = dict([(k,int(v)) for (k,v) in l])
 #target = open("observations.txt","a")
 #target.write("With N longest path\n")
 """for i in range(1,36):
@@ -84,6 +85,9 @@ for i  in range(21,36):
 	(filtered,original) = extractionFormatted('Documents/'+str(i)+'document.txt')
 	(IndexTerms,Query) = indexTerms(filtered)
 	N = len(filtered)
+	senti = sentiment(afinn,filtered)
+	abs_senti = [abs(i) for i in senti]
+	abs_senti.sort(reverse=True)
 	wm= weightMatrix(filtered,N,IndexTerms,filtered)
 	(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered,wm) #This variable stores the adjacency matrix of the document and maximum similarity
 	R = maximumReadability(documentMatrix,N) #This variable stores the maximum readability matrix

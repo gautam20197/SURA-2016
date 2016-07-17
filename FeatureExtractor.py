@@ -191,7 +191,18 @@ def centralTheme(matrix):
 	central = [i/l for i in list(sumOfColumns)]
 	return central
 
-
+# This function takes all the filtered sentences of the document and the sentiment dictionary
+# and returns a list with the sentiment value (ie summation of sentiments of the words of a single 
+# sentence) of all the sentences.
+def sentiment(afinn,filtered):
+	senti = []
+	for i in filtered:
+		current = i.split(" ")
+		total = 0
+		for j in current:
+			total+=afinn.get(j,0)
+		senti.append(total)
+	return senti
 
 #targetFile = open(str(i)+".txt","a")
 #for i in range(len(original)):

@@ -164,7 +164,41 @@ def aggregateSimilarity(s,documentMatrix,sortedAggregate):
 		total+=sum(a[:,i])
 	normalizationFactor = sum(sortedAggregate[:S])
 	return (total/normalizationFactor)
-	
+
+# This function returns the number of sentences of the summary which have positive sentiments 
+# divided by total number of sentences
+def positiveSentiment(s,senti):
+	positions = [i for i in range(len(s)) if(s[i]==1)]
+	S = len(positions)
+	total = 0
+	for i in positions:
+		if(senti[i]>0):
+			total+=1
+	return (total/S)
+
+# This function returns the number of sentences of the summary which have negative sentiments 
+# divided by total number of sentences
+def negativeSentiment(s,senti):
+	positions = [i for i in range(len(s)) if(s[i]==1)]
+	S = len(positions)
+	total = 0
+	for i in positions:
+		if(senti[i]<0):
+			total+=1
+	return (total/S)
+
+# This function returns the sum of the absolute sentiment divided by the maximum sum possible
+# by taking the sum of the sorted absolute sentiment values upto S
+def sentimentFactor(s,senti,abs_senti):
+	S = sum(s)
+	positions = [i for i in range(len(s)) if(s[i]==1)]
+	normalizing = sum(abs_senti[:S])
+	total = 0
+	for i in positions:
+		total += abs(senti[i])
+	return (total/normalizing)
+
+
 
 
 
