@@ -95,7 +95,7 @@ for i  in range(21,36):
 	sortedAggregate = np.array(documentMatrix)
 	sortedAggregate = [sum(sortedAggregate[:,i]) for i in range(N)]
 	sortedAggregate.sort(reverse = True)
-	prec=main(20,len(gold),N,M,documentMatrix,R,gold,centralTheme(wm),wm,sortedAggregate)
+	prec=main(20,len(gold),N,M,documentMatrix,R,gold,centralTheme(wm),wm,sortedAggregate,senti,abs_senti)
 	sumprec=sumprec+prec
 	print(i,prec,maxFitness[i-1])
 

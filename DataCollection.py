@@ -3,6 +3,8 @@ import random
 from Summary import *
 import re
 
+l = [line.split('\n')[0].split('\t') for line in open("AFINN-111.txt")]
+afinn = dict([(k,int(v)) for (k,v) in l])
 pos = []
 pos.append([1,2,8,15,16,18,21,22,25,26,27,28,29])
 pos.append([1,2,4,6,7,9,11,12])
@@ -48,7 +50,7 @@ def training(indicesOne):
 		chrom[i]=1
 	others=[x for x in range(N) if(chrom[x]==0)]
 	trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
-	dataFile.write(str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+",1")
+	dataFile.write(str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+",1")
 	dataFile.write("\n")
 	for i in range(1,min(len(indices),len(others))+1):
 		indexZero=random.sample(indices,i)
@@ -58,7 +60,7 @@ def training(indicesOne):
 		for j in indexOne:
 			chrom[j]=1
 		trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
-		dataFile.write(str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
+		dataFile.write(str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
 		dataFile.write("\n")
 		chrom=[0]*N
 		for j in indices:
@@ -67,7 +69,7 @@ def training(indicesOne):
 	for i in range(min(len(indices),len(others))):
 		chrom=np.random.permutation(chrom)
 		trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
-		dataFile.write(str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
+		dataFile.write(str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
 		dataFile.write("\n")
 
 dataFile=open("data.txt",'w')
@@ -76,6 +78,9 @@ for it in range(1,21):
 	(filtered,original) = extractionFormatted('documents/'+str(it)+'document.txt')
 	(IndexTerms,Query) = indexTerms(filtered)
 	N = len(filtered)
+	senti = sentiment(afinn,filtered)
+	abs_senti = [abs(i) for i in senti]
+	abs_senti.sort(reverse=True)
 	wm=weightMatrix(filtered,N,IndexTerms,filtered)
 	(documentMatrix, M) = adjacency(filtered,N,IndexTerms,filtered,wm) #This variable stores the adjacency matrix of the document and maximum similarity
 	R = maximumReadability(documentMatrix,N) #This variable stores the maximum readability matrix

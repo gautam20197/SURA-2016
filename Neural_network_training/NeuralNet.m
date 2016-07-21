@@ -4,8 +4,8 @@ clear ; close all; clc
 fprintf('Loading Data ...\n')
 
 data = load('data.txt');
-X = data(:,1:6);
-y = data(:,7);
+X = data(:,1:7);
+y = data(:,8);
 m = size(X, 1);
 
 net=network;
@@ -17,17 +17,22 @@ net.biasConnect(3)=1;
 net.inputConnect=[1;0;0];
 net.layerConnect=[0,0,0;1,0,0;0,1,0];
 net.outputConnect=[0 0 1];
-net.inputs{1}.size=6;
+net.inputs{1}.size=7;
 net.layers{1}.size=8;
 net.layers{1}.transferFcn='logsig';
 net.layers{1}.initFcn = 'initnw';
-net.layers{2}.size=5;
+net.layers{2}.size=3;
 net.layers{2}.transferFcn='logsig';
 net.layers{2}.initFcn='initnw';
 net.layers{3}.size=1;
 net.layers{3}.transferFcn='logsig';
 net.layers{3}.initFcn='initnw';
 net.trainFcn = 'trainlm';
+net.divideFcn='dividerand';
+net.divideParam.trainRatio=85/100;
+net.divideParam.valRatio=15/100;
+net.divideParam.testRatio=0/100;
+net.plotFcns = {'plotperform','plottrainstate'};
 net=init(net);
 net=train(net,X',y');
 Theta1=[net.b{1}, net.IW{1,1}];

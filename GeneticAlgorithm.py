@@ -10,6 +10,9 @@ f1.close()
 f2 = open('Neural_network_training/Theta2.txt','r')
 Theta2=np.matrix([list(map(float,line.split(','))) for line in f2])
 f2.close()
+f3 = open('Neural_network_training/Theta3.txt','r')
+Theta3=np.matrix([list(map(float,line.split(','))) for line in f3])
+f3.close()
 #print(Theta1)
 #print(Theta2)
 
@@ -24,10 +27,13 @@ def sigmoidArray(arr):
 
 #function to implement forward propagation in neural network
 def forward(X):
-	hidden=sigmoidArray(Theta1*X)
-	biasedHidden=np.matrix(([1]),dtype=float)
-	biasedHidden=np.vstack((biasedHidden,hidden))
-	output=sigmoidArray(Theta2*biasedHidden)
+	hidden1=sigmoidArray(Theta1*X)
+	biasedHidden1=np.matrix(([1]),dtype=float)
+	biasedHidden1=np.vstack((biasedHidden1,hidden1))
+	hidden2=sigmoidArray(Theta2*biasedHidden1)
+	biasedHidden2=np.matrix(([1]),dtype=float)
+	biasedHidden2=np.vstack((biasedHidden2,hidden2))
+	output=sigmoidArray(Theta3*biasedHidden2)
 	return float(output[0][0])
 
 #initialize a random population for genetic algorithm
@@ -37,9 +43,9 @@ def initPopulation(size,S,N):
 	return [np.random.permutation(init) for x in range(size)]
 
 #fitness function for a given summary, input  in the form of a chromosome 
-def fitness(a,b,chromosome,N,M,documentMatrix,R,centralDocument,wm,sortedAggregate):
+def fitness(a,b,chromosome,N,M,documentMatrix,R,centralDocument,wm,sortedAggregate,senti,abs_senti):
 	#f= a*cohesionFactor(chromosome,N,M,documentMatrix)+b*readabilityFactor(chromosome,N,documentMatrix,R)
-	X=np.matrix(([1],[sentencePosition(chromosome)],[aggregateSimilarity(chromosome,documentMatrix,sortedAggregate)],[themeSimilarity(centralDocument,centralTheme(summaryWeight(chromosome,wm)))],[sum(chromosome)/N],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
+	X=np.matrix(([1],[sentimentFactor(chromosome,senti,abs_senti)],[sentencePosition(chromosome)],[aggregateSimilarity(chromosome,documentMatrix,sortedAggregate)],[themeSimilarity(centralDocument,centralTheme(summaryWeight(chromosome,wm)))],[sum(chromosome)/N],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
 	f=forward(X)
 	return f
 
@@ -149,10 +155,10 @@ def smallest(fitnesses):
 			
 
 #The overall genetic algorithm for a fixed fitness function
-def GA(size,S,N,a,b,M,documentMatrix,R,centralDocument,wm,sortedAggregate):
+def GA(size,S,N,a,b,M,documentMatrix,R,centralDocument,wm,sortedAggregate,senti,abs_senti):
 	#initialize a random population of required size
 	population=initPopulation(size,S,N)
-	fitnesses=[fitness(a,b,x,N,M,documentMatrix,R,centralDocument,wm,sortedAggregate) for x in population]
+	fitnesses=[fitness(a,b,x,N,M,documentMatrix,R,centralDocument,wm,sortedAggregate,senti,abs_senti) for x in population]
 	#best two individuals selected
 	best=elitism(fitnesses)
 
@@ -175,7 +181,7 @@ def GA(size,S,N,a,b,M,documentMatrix,R,centralDocument,wm,sortedAggregate):
 		mutate=random.randint(0,1)
 		if(mutate==1):
 			mutation(offspring[1],N)
-		(f1,f2)=(fitness(a,b,offspring[0],N,M,documentMatrix,R,centralDocument,wm,sortedAggregate),fitness(a,b,offspring[1],N,M,documentMatrix,R,centralDocument,wm,sortedAggregate))
+		(f1,f2)=(fitness(a,b,offspring[0],N,M,documentMatrix,R,centralDocument,wm,sortedAggregate,senti,abs_senti),fitness(a,b,offspring[1],N,M,documentMatrix,R,centralDocument,wm,sortedAggregate,senti,abs_senti))
 
 		
 		#pruning the set by removing the two weakest individuals from the new set
@@ -221,13 +227,13 @@ def GA(size,S,N,a,b,M,documentMatrix,R,centralDocument,wm,sortedAggregate):
 
 
 #runs 50iterations of GA function for different values of fitness function weights
-def main(size,S,N,M,documentMatrix,R,positions,centralDocument,wm,sortedAggregate):
+def main(size,S,N,M,documentMatrix,R,positions,centralDocument,wm,sortedAggregate,senti,abs_senti):
 	sump=0
 	fittest=-1
 	summary=[0]
 	for i in range(50):
 		a=random.random()
-		(temp1,temp2)=GA(size,S,N,a,(1-a),M,documentMatrix,R,centralDocument,wm,sortedAggregate)
+		(temp1,temp2)=GA(size,S,N,a,(1-a),M,documentMatrix,R,centralDocument,wm,sortedAggregate,senti,abs_senti)
 		sump=sump+precision(temp1,positions)
 		#print(fittest)
 		#if(temp2>fittest):
