@@ -8,7 +8,13 @@ import numpy as np
 import os
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
-
+import curses
+from curses.ascii import isdigits # This is used to find if a character is a digit from '0' to '9'
+from nltk.corpus import cmudict
+# cmudict stands for Carnegie Mellon Pronouncing Dictionary
+# vowels are marked by arithmetic digits in the end of a word thus we can find
+# the number of syllables by the pieces of the list ending with a digit
+syllables = cmudict.dict()
 
 # This function is used to extract the sentences from a non formatted document
 def extraction(document):
@@ -46,6 +52,13 @@ def extractionFormatted(document):
 	f.close()
 	return(filtered,sentences)
 
+#This fucntion returns the number of words and letters in the document
+def extractionWordsLetters(original):
+	words = sum([len(i) for i in original])
+	letters = 0
+	for i in original:
+		letters+=sum([len(j) for j in i])
+	return (words,letters)
 
 # This function takes an list of sentences of a document(without stop words)
 # and gives us an list of all the index terms

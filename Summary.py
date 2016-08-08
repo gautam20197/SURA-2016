@@ -198,6 +198,94 @@ def sentimentFactor(s,senti,abs_senti):
 		total += abs(senti[i])
 	return (total/normalizing)
 
+# This function returns the number of words in the summary by using the original
+# list of sentences
+def extractWords(s,original):
+	sen = []
+	p = [i for i in range(len(s)) if(s[i]==1)]
+	for i in p:
+		sen.append(original[i])
+	words = sum([len(i) for i in sen])
+	return words
+
+# This function returns the number of letters in the summary by using the original
+# list of sentences
+def extractLetters(s,original):
+	sen = []
+	p = [i for i in range(len(s)) if(s[i]==1)]
+	for i in p:
+		sen.append(original[i])
+	letters = 0
+	for i in sen:
+		letters+=sum([len(j) for j in i])
+	return letters
+
+# This function returns the number of syllables in a word by using cmudict and the 
+# process described in the FeatureExtractor below the statement that imports cmudict
+def nsyl(word):
+	word = word.lower()
+	if(syllables.get(word,0)==0):
+		return 0
+	else:
+		return [len(list(y for y in x if isdigit(y[-1]))) for x in syllables[word.lower()]][0]
+
+# This function returns the number of syllables in a summary
+def extractSyllables(s,original):
+	sen = []
+	p = [i for i in range(len(s)) if(s[i]==1)]
+	for i in p:
+		sen.append(original[i])
+	syllables = 0
+	for i in sen:
+		for j in i:
+			syllables+=nsyl(j)
+	return syllables
+
+# This function is used to find out the number of complex words in the summary.
+# We calculate the complex words by counting the words with three or more than three syllables
+def complexWords(s,original):
+	sen = []
+	p = [i for i in range(len(s)) if(s[i]==1)]
+	for i in p:
+		sen.append(original[i])
+	c = 0
+	for i in sen:
+		for j in i:
+			if(nsyl[j]>=3):
+				c+=1
+	return c
+
+# This function returns the Coleman-liu factor for readability of a summary
+def coleman(s,original):
+	words = extractWords(s,original)
+	letters = extractLetters(s,original)
+	sen = sum(s)
+	L = (letters/words)*100
+	S = (sen/words)*100
+	CLI = 0.0588*L-0.296*S-15.8
+	return CLI
+
+# This function returns the automated readability index of a summary
+def automatedReadability(s,original):
+	words = extractWords(s,original)
+	letters = extractLetters(s,original)
+	sen = sum(s)
+	ARI = 4.71*(letters/words)+0.5*(words/sentences) - 21.43
+	return (int(math.ceil(ARI)))
+
+# This function applies the flesch kincaid readability test and returns the value of reading ease
+def flesch(s,original):
+	sen = sum(s)
+	words = extractWords(s,original)
+	syl = extractSyllables(s,original)
+	return (206.835-1.015*(words/sen)-84.6*(syl/words))
+
+# This function returns the Gunning Fog Index using complex words extracted using complexWords function
+def gunningFog(s,original):
+	sen = sum(s)
+	words = extractWords(s,original)
+	c = complexWords(s,original)
+	return (0.4*((words/sen)+100*(c/words)))
 
 
 
