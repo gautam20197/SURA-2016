@@ -270,7 +270,7 @@ def automatedReadability(s,original):
 	words = extractWords(s,original)
 	letters = extractLetters(s,original)
 	sen = sum(s)
-	ARI = 4.71*(letters/words)+0.5*(words/sentences) - 21.43
+	ARI = 4.71*(letters/words)+0.5*(words/sen) - 21.43
 	return (int(math.ceil(ARI)))
 
 # This function applies the flesch kincaid readability test and returns the value of reading ease
