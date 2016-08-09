@@ -205,7 +205,7 @@ def extractWords(s,original):
 	p = [i for i in range(len(s)) if(s[i]==1)]
 	for i in p:
 		sen.append(original[i])
-	words = sum([len(i) for i in sen])
+	words = sum([len(i.split(" ")) for i in sen])
 	return words
 
 # This function returns the number of letters in the summary by using the original
@@ -224,10 +224,11 @@ def extractLetters(s,original):
 # process described in the FeatureExtractor below the statement that imports cmudict
 def nsyl(word):
 	word = word.lower()
+	digits = ['0','1','2','3','4','5','6','7','8','9']
 	if(syllables.get(word,0)==0):
 		return 0
 	else:
-		return [len(list(y for y in x if isdigit(y[-1]))) for x in syllables[word.lower()]][0]
+		return [len(list(y for y in x if (y[-1] in digits))) for x in syllables[word.lower()]][0]
 
 # This function returns the number of syllables in a summary
 def extractSyllables(s,original):
