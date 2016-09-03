@@ -17,7 +17,7 @@ f3.close()
 #print(Theta2)
 
 def sigmoid(x):
-  return 1 / (1 + math.exp(-x))
+	return 1 / (1 + math.exp(-x))
 
 def sigmoidArray(arr):
 	(rows,columns)=np.shape(arr)
@@ -45,7 +45,7 @@ def initPopulation(size,S,N):
 #fitness function for a given summary, input  in the form of a chromosome 
 def fitness(a,b,chromosome,N,M,documentMatrix,R,centralDocument,wm,sortedAggregate,senti,abs_senti,original):
 	#f= a*cohesionFactor(chromosome,N,M,documentMatrix)+b*readabilityFactor(chromosome,N,documentMatrix,R)
-	X=np.matrix(([1],[automatedReadability(chromosome,original)],[sentimentFactor(chromosome,senti,abs_senti)],[sentencePosition(chromosome)],[aggregateSimilarity(chromosome,documentMatrix,sortedAggregate)],[themeSimilarity(centralDocument,centralTheme(summaryWeight(chromosome,wm)))],[sum(chromosome)/N],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
+	X=np.matrix(([1],[themeSimilarity2(centralDocument,centralTheme(summaryWeight(chromosome,wm)))],[sentimentFactor(chromosome,senti,abs_senti)],[sentencePosition(chromosome)],[aggregateSimilarity(chromosome,documentMatrix,sortedAggregate)],[themeSimilarity(centralDocument,centralTheme(summaryWeight(chromosome,wm)))],[sum(chromosome)/N],[cohesionFactor(chromosome,N,M,documentMatrix)],[readabilityFactor(chromosome,N,documentMatrix,R)]),dtype=float)
 	f=forward(X)
 	return f
 

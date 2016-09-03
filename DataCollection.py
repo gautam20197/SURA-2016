@@ -50,7 +50,8 @@ def training(indicesOne):
 		chrom[i]=1
 	others=[x for x in range(N) if(chrom[x]==0)]
 	trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
-	dataFile.write(str(automatedReadability(chrom,original))+", "+str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+",1")
+	trf2=themeSimilarity2(centralDocument,centralTheme(summaryWeight(chrom,wm)))
+	dataFile.write(str(trf2)+","+str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+",1")
 	dataFile.write("\n")
 	for i in range(1,min(len(indices),len(others))+1):
 		indexZero=random.sample(indices,i)
@@ -60,7 +61,8 @@ def training(indicesOne):
 		for j in indexOne:
 			chrom[j]=1
 		trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
-		dataFile.write(str(automatedReadability(chrom,original))+", "+str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
+		trf2=themeSimilarity2(centralDocument,centralTheme(summaryWeight(chrom,wm)))
+		dataFile.write(str(trf2)+","+str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
 		dataFile.write("\n")
 		chrom=[0]*N
 		for j in indices:
@@ -69,7 +71,8 @@ def training(indicesOne):
 	for i in range(min(len(indices),len(others))):
 		chrom=np.random.permutation(chrom)
 		trf = themeSimilarity(centralDocument,centralTheme(summaryWeight(chrom,wm)))
-		dataFile.write(str(automatedReadability(chrom,original))+", "+str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
+		trf2=themeSimilarity2(centralDocument,centralTheme(summaryWeight(chrom,wm)))
+		dataFile.write(str(trf2)+","+str(sentimentFactor(chrom,senti,abs_senti))+","+str(sentencePosition(chrom))+","+str(aggregateSimilarity(chrom,documentMatrix,sortedAggregate))+","+str(trf)+","+str(S/N)+","+str(cohesionFactor(chrom,N,M,documentMatrix))+","+str(readabilityFactor(chrom,N,documentMatrix,R))+","+str(precision(chrom,indicesOne)))
 		dataFile.write("\n")
 
 dataFile=open("data.txt",'w')

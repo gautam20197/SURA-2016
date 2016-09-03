@@ -106,20 +106,29 @@ def summaryWeight(s,weightMatrix):
 	return matrix
 
 # This function takes the central theme of the document and the central theme of summary
-# and finds the similarity by taking dot product of unti vectors
+# and finds the similarity by taking dot product of unit vectors
 def themeSimilarity(centralDocument,centralSummary):
 	combined = list(zip(centralDocument,centralSummary))
 	similarity = 0
 	for i in combined:
 		(a,b) = i
-		similarity = similarity + (a*b) # dot product of the two vectors
-	w1 = [w*w for w in centralDocument] 
+		similarity = similarity + (a-b)*(a-b) # dot product of the two vectors
+	#w1 = [w*w for w in centralDocument] 
 	#total1 = math.sqrt(sum(w1)) # square root of the sum of sqaures of all elements of centralDocument
-	w2 = [w*w for w in centralSummary]
-	#total2 = math.sqrt(sum(w2)) # square root of the sum of sqaures of all elements of centralSumaary
+	#w2 = [w*w for w in centralSummary]
+	#total2 = math.sqrt(sum(w2)) # square root of the sum of sqaures of all elements of centralSummary
 	#if(total1==0 or total2==0):
 	#		return 0
+	return math.sqrt(similarity)
+
+def themeSimilarity2(centralDocument,centralSummary):
+	combined = list(zip(centralDocument,centralSummary))
+	similarity = 0
+	for i in combined:
+		(a,b) = i
+		similarity = similarity + a*b
 	return similarity
+
 
 # This function takes a chromosome and the original document and writes the summary generated 
 # into a file in systems which is then used by rouge to find the precision
@@ -252,7 +261,7 @@ def complexWords(s,original):
 	c = 0
 	for i in sen:
 		for j in i:
-			if(nsyl[j]>=3):
+			if(nsyl(j)>=3):
 				c+=1
 	return c
 
