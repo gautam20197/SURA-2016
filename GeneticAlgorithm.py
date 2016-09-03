@@ -4,13 +4,13 @@ import math
 from Summary import *
 
 #Neural network weights
-f1 = open('Neural_network_training/Theta1.txt','r')
+f1 = open('Neural_Network/Theta1.txt','r')
 Theta1=np.matrix([list(map(float,line.split(','))) for line in f1])
 f1.close()
-f2 = open('Neural_network_training/Theta2.txt','r')
+f2 = open('Neural_Network/Theta2.txt','r')
 Theta2=np.matrix([list(map(float,line.split(','))) for line in f2])
 f2.close()
-f3 = open('Neural_network_training/Theta3.txt','r')
+f3 = open('Neural_Network/Theta3.txt','r')
 Theta3=np.matrix([list(map(float,line.split(','))) for line in f3])
 f3.close()
 #print(Theta1)
