@@ -33,14 +33,19 @@ net.divideParam.trainRatio=85/100;
 net.divideParam.valRatio=15/100;
 net.divideParam.testRatio=0/100;
 net.plotFcns = {'plotperform','plottrainstate'};
-view(net);
 pause;
 net=init(net);
 net=train(net,X',y');
 Theta1=[net.b{1}, net.IW{1,1}];
 Theta2=[net.b{2}, net.LW{2,1}];
 Theta3=[net.b{3}, net.LW{3,2}];
-pred=feedForward(Theta1,Theta2,Theta3,X);
+dlmwrite('Theta1.txt',Theta1);
+dlmwrite('Theta2.txt',Theta2);
+dlmwrite('Theta3.txt',Theta3);
+%pred=feedForward(Theta1,Theta2,Theta3,X);
+pred=net(X');
+pred=pred';
+
 
 fprintf('\nTraining Set Accuracy: %f\n', mean(double(abs(pred-y)<0.05)) * 100);
 
@@ -62,7 +67,3 @@ fprintf('\nTraining Set Accuracy: %f\n', mean(double(abs(pred-y)<0.05)) * 100);
 %surf(x1_vals, x2_vals, y_vals)
 %xlabel('Cohesion Factor'); ylabel('Readability factor');
 
-
-dlmwrite('Theta1.txt',Theta1);
-dlmwrite('Theta2.txt',Theta2);
-dlmwrite('Theta3.txt',Theta3);
